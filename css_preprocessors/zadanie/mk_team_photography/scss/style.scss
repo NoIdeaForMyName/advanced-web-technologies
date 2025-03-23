@@ -1,0 +1,358 @@
+@use "sass:math";
+@use "sass:color";
+
+// Zmienne
+$primary-color: #2c3e50;
+$secondary-color: #ecf0f1;
+$accent-color: #e74c3c;
+$spacing: 2rem;
+$breakpoint-mobile: 768px;
+
+// Mixins
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin respond-to($breakpoint) {
+    @media (max-width: $breakpoint) {
+        @content;
+    }
+}
+
+@mixin gradient-background($start-color, $end-color, $angle: 45deg) {
+    background: linear-gradient($angle, $start-color, $end-color);
+}
+
+// Funkcje
+@function set-text-color($color) {
+    @if (color.channel($color, "lightness", $space: hsl) > 50) {
+        @return #000;
+    } @else {
+        @return #fff;
+    }
+}
+
+@function calculate-rem($px) {
+    @return math.div($px, 16) * 1rem;
+}
+
+// Dziedziczenie
+%button-base {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn {
+    @extend %button-base;
+    background-color: $accent-color;
+    color: set-text-color($accent-color);
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        background-color: color.adjust($accent-color, $lightness: -10%);
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 150%;
+        height: 150%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%) rotate(45deg);
+        transition: all 0.5s ease;
+        opacity: 0;
+    }
+
+    &:hover::after {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    &--contact {
+        @extend %button-base;
+        background-color: $primary-color;
+        color: $secondary-color;
+    }
+}
+
+// Główne style
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    background-color: $secondary-color;
+}
+
+.header {
+    background-color: $primary-color;
+    padding: math.div($spacing, 2);
+
+    .nav {
+        @include flex-center;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+
+        &__logo {
+            color: $secondary-color;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        &__list {
+            list-style: none;
+            display: flex;
+            gap: $spacing;
+
+            a {
+                color: $secondary-color;
+                text-decoration: none;
+
+                &:hover {
+                    color: color.adjust($accent-color, $lightness: 20%);
+                }
+            }
+        }
+    }
+}
+
+.hero {
+    height: 80vh;
+    //background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('hero-bg.jpg');
+    background-size: cover;
+    position: relative;
+
+    &__content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: $secondary-color;
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: $spacing;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .btn {
+            animation: fadeIn 1.5s ease-in-out;
+        }
+    }
+}
+
+// Sekcja O nas
+.about {
+    padding: $spacing * 2 0;
+    text-align: justify;
+    
+    &__content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 $spacing;
+        
+        p {
+            line-height: 1.6;
+            animation: fadeIn 1s ease-in-out;
+        }
+    }
+}
+
+// Sekcja Portfolio
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: $spacing;
+    padding: $spacing;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    &__item {
+        position: relative;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .overlay {
+            @include flex-center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+
+            h3 {
+                color: $secondary-color;
+                transition: color 0.3s ease;
+            }
+
+            &:hover {
+                opacity: 1;
+
+                h3 {
+                    color: set-text-color(rgba(0, 0, 0, 0.5));
+                }
+            }
+        }
+
+        &:nth-child(odd) {
+            transform: rotate(2deg);
+        }
+        &:nth-child(even) {
+            transform: rotate(-2deg);
+        }
+    }
+}
+
+// Sekcja Kontakt
+.contact {
+    padding: $spacing * 2 0;
+    text-align: center;
+    
+    &__content {
+        @include flex-center;
+        flex-direction: column;
+    }
+    
+    &__info {
+        list-style: none;
+        padding: 0;
+        margin: $spacing 0 0 0;
+        
+        li {
+            margin: math.div($spacing, 2) 0;
+            
+            a {
+                color: inherit;
+                text-decoration: none;
+                transition: color 0.3s ease;
+                
+                &:hover {
+                    color: color.adjust($accent-color, $lightness: 20%);
+                }
+            }
+        }
+    }
+}
+
+.footer {
+    background-color: $primary-color;
+    color: $secondary-color;
+    text-align: center;
+    padding: math.div($spacing, 2);
+    margin-top: $spacing * 2;
+}
+
+// Media queries
+@include respond-to($breakpoint-mobile) {
+    .nav {
+        flex-direction: column;
+        gap: math.div($spacing, 2);
+
+        &__list {
+            flex-direction: column;
+            gap: math.div($spacing, 2);
+        }
+    }
+
+    .about {
+        padding: $spacing 0;
+        
+        &__content {
+            p {
+                font-size: calculate-rem(16);
+            }
+        }
+    }
+
+    .hero {
+        height: 60vh;
+
+        &__content h1 {
+            font-size: 2rem;
+        }
+    }
+    
+    .contact {
+        padding: $spacing 0;
+        
+        &__info li {
+            font-size: calculate-rem(18);
+        }
+    }
+}
+
+// Animacje
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@for $i from 1 through 5 {
+    .fade-in-#{$i} {
+        animation: fadeIn #{$i}s ease-in-out;
+    }
+}
+
+// Generowanie klas dla marginesów
+@for $i from 1 through 5 {
+    .mt-#{$i} {
+        margin-top: $i * $spacing;
+    }
+    .mb-#{$i} {
+        margin-bottom: $i * $spacing;
+    }
+    .ml-#{$i} {
+        margin-left: $i * $spacing;
+    }
+    .mr-#{$i} {
+        margin-right: $i * $spacing;
+    }
+}
+
+// Generowanie klas dla odcieni kolorów
+$colors: (
+    "primary": $primary-color,
+    "secondary": $secondary-color,
+    "accent": $accent-color
+);
+
+@each $name, $color in $colors {
+    .bg-#{$name} {
+        background-color: $color;
+    }
+    .text-#{$name} {
+        color: $color;
+    }
+}
+
+// Zmienne dla czcionek
+$font-sizes: (
+    "small": 0.875rem,
+    "medium": 1rem,
+    "large": 1.25rem,
+    "xlarge": 1.5rem,
+    "xxlarge": 2rem
+);
+
+@each $name, $size in $font-sizes {
+    .text-#{$name} {
+        font-size: $size;
+    }
+}

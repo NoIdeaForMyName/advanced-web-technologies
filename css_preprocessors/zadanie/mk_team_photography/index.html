@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotograf - MK Team</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="#" class="nav__logo">MK Team Photography</a>
+            <ul class="nav__list">
+                <li><a href="#o-mnie">O nas</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" style="background: linear-gradient(45deg, #2c3e50, #e74c3c);">
+        <div class="hero__content">
+            <h1>Uwieczniamy piękno świata</h1>
+            <a href="#portfolio" class="btn btn--contact">Zobacz portfolio</a>
+            <a href="#kontakt" class="btn btn--contact">Kontakt</a>
+        </div>
+    </section>
+
+    <!-- Sekcja O nas -->
+    <section class="about mt-2 mb-2 bg-secondary" id="o-mnie">
+        <div class="about__content">
+            <h2 class="text-xxlarge text-primary mb-1">O nas</h2>
+            <p class="text-medium text-primary">
+                Jesteśmy profesjonalnym zespołem fotografów z ponad 10-letnim doświadczeniem. Specjalizujemy się w fotografii podróżniczej, eventowej oraz portretowej. Nasza pasja to uchwycenie wyjątkowych chwil i przekształcenie ich w niezapomniane obrazy.
+            </p>
+        </div>
+    </section>
+
+    <section class="gallery mt-2 mb-2" id="portfolio">
+        <div class="gallery__item ml-1 mr-1">
+            <img src="img/europa.jpg" alt="Europa">
+            <div class="overlay">
+                <h3>Europa</h3>
+            </div>
+        </div>
+        <div class="gallery__item ml-1 mr-1">
+            <img src="img/azja.jpg" alt="Azja">
+            <div class="overlay">
+                <h3>Azja</h3>
+            </div>
+        </div>
+        <div class="gallery__item ml-1 mr-1">
+            <img src="img/ameryka.jpg" alt="Ameryka">
+            <div class="overlay">
+                <h3>Ameryka</h3>
+            </div>
+        </div>
+        <div class="gallery__item ml-1 mr-1">
+            <img src="img/afryka.jpg" alt="Afryka">
+            <div class="overlay">
+                <h3>Afryka</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sekcja Kontakt -->
+    <section class="contact mt-2 mb-2 bg-secondary" id="kontakt">
+        <div class="contact__content">
+            <h2 class="text-xxlarge text-primary mb-1">Kontakt</h2>
+            <ul class="contact__info">
+                <li class="text-large text-primary">
+                    📞 <a href="tel:+48123456789" class="text-secondary">+48 123 456 789</a>
+                </li>
+                <li class="text-large text-primary">
+                    ✉️ <a href="mailto:kontakt@mkteam.pl" class="text-primary">kontakt@mkteam.pl</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <footer class="footer bg-primary">
+        <p class="text-medium">&copy; 2025 MK Team Photography</p>
+    </footer>
+</body>
+</html>
