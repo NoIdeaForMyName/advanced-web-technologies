@@ -25,7 +25,6 @@ $breakpoint-mobile: 768px;
     background: linear-gradient($angle, $start-color, $end-color);
 }
 
-// Funkcje
 @function set-text-color($color) {
     @if (color.channel($color, "lightness", $space: hsl) > 50) {
         @return #000;
@@ -38,7 +37,6 @@ $breakpoint-mobile: 768px;
 //     @return math.div($px, 16) * 1rem;
 // }
 
-// Dziedziczenie
 %button-base {
     padding: 1rem 2rem;
     border: none;
@@ -85,7 +83,6 @@ $breakpoint-mobile: 768px;
 
 }
 
-// Główne style
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -135,7 +132,7 @@ body {
     &__content {
         display: flex;
         flex-wrap: wrap;
-        gap: math.div($spacing, 2); // odstęp między przyciskami
+        gap: math.div($spacing, 2);
         justify-content: center;
 
         position: absolute;
@@ -158,7 +155,6 @@ body {
     }
 }
 
-// Sekcja O nas
 .about {
     padding: $spacing * 2 0;
     text-align: justify;
@@ -175,7 +171,6 @@ body {
     }
 }
 
-// Sekcja Portfolio
 .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -228,7 +223,6 @@ body {
     }
 }
 
-// Sekcja Kontakt
 .contact {
     padding: $spacing * 2 0;
     text-align: center;
@@ -267,7 +261,6 @@ body {
     margin-top: $spacing * 2;
 }
 
-// Media queries
 @include respond-to($breakpoint-mobile) {
     .nav {
         flex-direction: column;
@@ -306,7 +299,6 @@ body {
     }
 }
 
-// Animacje
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -318,7 +310,6 @@ body {
     }
 }
 
-// Generowanie klas dla marginesów
 @for $i from 1 through 5 {
     .mt-#{$i} {
         margin-top: $i * $spacing;
@@ -334,7 +325,6 @@ body {
     }
 }
 
-// Generowanie klas dla odcieni kolorów
 $colors: (
     "primary": $primary-color,
     "secondary": $secondary-color,
@@ -350,7 +340,6 @@ $colors: (
     }
 }
 
-// Zmienne dla czcionek
 $font-sizes: (
     "small": 0.875rem,
     "medium": 1rem,
