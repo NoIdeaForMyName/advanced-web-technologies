@@ -34,9 +34,9 @@ $breakpoint-mobile: 768px;
     }
 }
 
-@function calculate-rem($px) {
-    @return math.div($px, 16) * 1rem;
-}
+// @function calculate-rem($px) {
+//     @return math.div($px, 16) * 1rem;
+// }
 
 // Dziedziczenie
 %button-base {
@@ -57,6 +57,11 @@ $breakpoint-mobile: 768px;
 
     &:hover {
         background-color: color.adjust($accent-color, $lightness: -10%);
+        
+        &::after {
+            opacity: 1;
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
     }
 
     &::after {
@@ -72,10 +77,10 @@ $breakpoint-mobile: 768px;
         opacity: 0;
     }
 
-    &:hover::after {
-        opacity: 1;
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
+    // &:hover::after {
+    //     opacity: 1;
+    //     transform: translate(-50%, -50%) rotate(0deg);
+    // }
 
     &--contact {
         @extend %button-base;
@@ -125,12 +130,18 @@ body {
 }
 
 .hero {
+    @include gradient-background(rgb(0, 0, 0), $accent-color);
     height: 80vh;
     //background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('hero-bg.jpg');
     background-size: cover;
     position: relative;
 
     &__content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: math.div($spacing, 2); // odstęp między przyciskami
+        justify-content: center;
+
         position: absolute;
         top: 50%;
         left: 50%;
@@ -146,6 +157,7 @@ body {
 
         .btn {
             animation: fadeIn 1.5s ease-in-out;
+            margin: 0.5rem;
         }
     }
 }
@@ -276,13 +288,13 @@ body {
         
         &__content {
             p {
-                font-size: calculate-rem(16);
+                font-size: 16px;
             }
         }
     }
 
     .hero {
-        height: 60vh;
+        // height: 60vh;
 
         &__content h1 {
             font-size: 2rem;
@@ -293,7 +305,7 @@ body {
         padding: $spacing 0;
         
         &__info li {
-            font-size: calculate-rem(18);
+            font-size: 18px;
         }
     }
 }
