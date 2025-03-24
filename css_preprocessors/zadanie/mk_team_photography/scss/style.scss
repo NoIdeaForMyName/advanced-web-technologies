@@ -50,8 +50,8 @@ $breakpoint-mobile: 768px;
 
 .btn {
     @extend %button-base;
-    background-color: $accent-color;
-    color: set-text-color($accent-color);
+    background-color: $primary-color;
+    color: set-text-color($primary-color);
     position: relative;
     overflow: hidden;
 
@@ -82,11 +82,7 @@ $breakpoint-mobile: 768px;
     //     transform: translate(-50%, -50%) rotate(0deg);
     // }
 
-    &--contact {
-        @extend %button-base;
-        background-color: $primary-color;
-        color: $secondary-color;
-    }
+
 }
 
 // Główne style
