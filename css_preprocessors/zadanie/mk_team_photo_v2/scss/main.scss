@@ -1,0 +1,59 @@
+@use "sass:math";
+@use "sass:color";
+
+@use "abstracts/variables";
+@use "abstracts/functions";
+@use "abstracts/mixins";
+@use "abstracts/placeholders";
+
+@use "base/base";
+@use "base/typography";
+
+@use "components/buttons";
+@use "components/nav";
+@use "components/hero";
+@use "components/gallery";
+
+@use "layout/header";
+@use "layout/about";
+@use "layout/contact";
+@use "layout/footer";
+
+@use "utilities/helpers";
+@use "utilities/animations";
+
+@include mixins.respond-to(variables.$breakpoint-mobile) {
+    .nav {
+        flex-direction: column;
+        gap: math.div(variables.$spacing, 2);
+
+        &__list {
+            flex-direction: column;
+            gap: math.div(variables.$spacing, 2);
+        }
+    }
+
+    .about {
+        padding: variables.$spacing 0;
+        
+        &__content {
+            p {
+                font-size: 16px;
+            }
+        }
+    }
+
+    .hero {
+        &__content h1 {
+            font-size: 2rem;
+        }
+    }
+
+    .contact {
+        padding: variables.$spacing 0;
+        
+        &__info li {
+            font-size: 18px;
+        }
+    }
+}

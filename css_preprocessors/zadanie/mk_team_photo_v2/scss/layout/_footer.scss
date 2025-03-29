@@ -1,0 +1,11 @@
+@use "sass:math";
+
+@use "../abstracts/variables" as *;
+
+.footer {
+    background-color: $primary-color;
+    color: $secondary-color;
+    text-align: center;
+    padding: math.div($spacing, 2);
+    margin-top: $spacing * 2;
+}

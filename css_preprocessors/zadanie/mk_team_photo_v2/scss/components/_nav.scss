@@ -1,0 +1,32 @@
+@use "sass:color";
+
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.nav {
+    @include flex-center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    &__logo {
+        color: $secondary-color;
+        font-size: 1.5rem;
+        text-decoration: none;
+    }
+
+    &__list {
+        list-style: none;
+        display: flex;
+        gap: $spacing;
+
+        a {
+            color: $secondary-color;
+            text-decoration: none;
+
+            &:hover {
+                color: color.adjust($accent-color, $lightness: 20%);
+            }
+        }
+    }
+}

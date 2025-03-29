@@ -1,0 +1,35 @@
+@use "sass:math";
+@use "sass:color";
+
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.contact {
+    padding: $spacing * 2 0;
+    text-align: center;
+    
+    &__content {
+        @include flex-center;
+        flex-direction: column;
+    }
+    
+    &__info {
+        list-style: none;
+        padding: 0;
+        margin: $spacing 0 0 0;
+        
+        li {
+            margin: math.div($spacing, 2) 0;
+            
+            a {
+                color: inherit;
+                text-decoration: none;
+                transition: color 0.3s ease;
+                
+                &:hover {
+                    color: color.adjust($accent-color, $lightness: 20%);
+                }
+            }
+        }
+    }
+}

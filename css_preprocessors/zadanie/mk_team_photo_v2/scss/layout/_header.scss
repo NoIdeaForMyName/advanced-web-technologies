@@ -1,0 +1,8 @@
+@use "sass:math";
+
+@use "../abstracts/variables" as *;
+
+.header {
+    background-color: $primary-color;
+    padding: math.div($spacing, 2);
+}

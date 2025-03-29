@@ -1,0 +1,13 @@
+@use "sass:color";
+
+@function set-text-color($color) {
+    @if (color.channel($color, "lightness", $space: hsl) > 50) {
+        @return #000;
+    } @else {
+        @return #fff;
+    }
+}
+
+// @function calculate-rem($px) {
+//     @return math.div($px, 16) * 1rem;
+// }

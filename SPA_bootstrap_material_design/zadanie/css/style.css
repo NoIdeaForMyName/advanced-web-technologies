@@ -1,0 +1,30 @@
+
+#intro {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                url('https://gfx.chillizet.pl/var/g3-chillizet-2/storage/images/podroze/barcelona-na-weekend-10-miejsc-ktore-trzeba-zobaczyc/22023594-1-pol-PL/To-miasto-urzeka-juz-od-pierwszego-wejrzenia-.-Idealny-kierunek-na-jesienny-wypad-za-granice_content.webp') center/cover;
+}
+
+.scroll-hint {
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-30px);}
+    60% {transform: translateY(-15px);}
+}
+
+.employee-card:hover {
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.map-section {
+    height: 400px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.describtion {
+    text-align: justify;
+}

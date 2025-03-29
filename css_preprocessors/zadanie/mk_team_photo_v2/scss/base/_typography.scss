@@ -1,0 +1,13 @@
+$font-sizes: (
+    "small": 0.875rem,
+    "medium": 1rem,
+    "large": 1.25rem,
+    "xlarge": 1.5rem,
+    "xxlarge": 2rem
+);
+
+@each $name, $size in $font-sizes {
+    .text-#{$name} {
+        font-size: $size;
+    }
+}
