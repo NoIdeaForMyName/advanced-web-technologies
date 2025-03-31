@@ -1,31 +1,82 @@
 // Inicjalizacja wykresu popularności
 function initPopularityChart() {
-    const ctx = document.getElementById('popularityChart');
-    if (ctx) {
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
+  const ctx = document.getElementById('popularityChart');
+  if (!ctx) return;
+
+  // Kolory dla wykresu
+  const backgroundColors = [
+      'rgba(54, 162, 235, 0.7)',
+      'rgba(255, 99, 132, 0.7)',
+      'rgba(75, 192, 192, 0.7)',
+      'rgba(255, 159, 64, 0.7)',
+      'rgba(153, 102, 255, 0.7)',
+      'rgba(255, 205, 86, 0.7)',
+      'rgba(201, 203, 207, 0.7)'
+  ];
+
+  const borderColors = backgroundColors.map(color => color.replace('0.7', '1'));
+
+  const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
           labels: ['Barcelona', 'Tokio', 'Nowy Jork', 'Rio de Janeiro', 'Marrakesz', 'Sydney', 'Bora Bora'],
-            datasets: [{
+          datasets: [{
               label: 'Popularność kierunków w 2024 (%)',
               data: [85, 92, 88, 78, 70, 75, 82],
-              backgroundColor: 'rgba(54, 162, 235, 0.7)',
-              borderColor: 'rgba(54, 162, 235, 1)',
+              backgroundColor: backgroundColors,
+              borderColor: borderColors,
               borderWidth: 1
-            }]
-        },
-        options: {
+          }]
+      },
+      options: {
           responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+              legend: {
+                  position: 'top',
+                  labels: {
+                      font: {
+                          size: 14
+                      }
+                  }
+              },
+              tooltip: {
+                  callbacks: {
+                      label: function(context) {
+                          return `${context.parsed.y}%`;
+                      }
+                  }
+              }
+          },
           scales: {
-            y: {
-              beginAtZero: true,
-              max: 100
-            }
+              y: {
+                  beginAtZero: true,
+                  max: 100,
+                  ticks: {
+                      callback: function(value) {
+                          return value + '%';
+                      }
+                  }
+              },
+              x: {
+                  ticks: {
+                      font: {
+                          size: 12
+                      }
+                  }
+              }
+          },
+          animation: {
+              duration: 1500
           }
-        }
-      });
-    }
-  }
+      }
+  });
+
+  // Obsługa zmiany rozmiaru okna
+  window.addEventListener('resize', function() {
+      chart.resize();
+  });
+}
   
   // Inicjalizacja AOS
   function initAOS() {
