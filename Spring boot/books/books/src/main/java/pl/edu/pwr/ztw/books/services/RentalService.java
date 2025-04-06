@@ -3,13 +3,14 @@ package pl.edu.pwr.ztw.books.services;
 import org.springframework.stereotype.Service;
 import pl.edu.pwr.ztw.books.models.Book;
 import pl.edu.pwr.ztw.books.models.Reader;
+import pl.edu.pwr.ztw.books.models.Rental;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 public class RentalService {
-    private final Map<Book, Reader> rentals = new HashMap<>();
+    private final Rental rentals = new Rental();
 
     public boolean rentBook(Book book, Reader reader) {
         if (book == null || reader == null || !book.isAvailable()) {
