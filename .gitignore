@@ -24,3 +24,27 @@
 /Vue/address-book-vue-app/*.njsproj
 /Vue/address-book-vue-app/*.sln
 /Vue/address-book-vue-app/*.sw?
+
+# Vue project specific
+/Vue/books-frontend/.DS_Store
+/Vue/books-frontend/node_modules
+/Vue/books-frontend/dist
+
+# local env files
+/Vue/books-frontend/.env.local
+/Vue/books-frontend/.env.*.local
+
+# Log files
+/Vue/books-frontend/npm-debug.log*
+/Vue/books-frontend/yarn-debug.log*
+/Vue/books-frontend/yarn-error.log*
+/Vue/books-frontend/pnpm-debug.log*
+
+# Editor directories and files
+/Vue/books-frontend/.idea
+/Vue/books-frontend/.vscode
+/Vue/books-frontend/*.suo
+/Vue/books-frontend/*.ntvs*
+/Vue/books-frontend/*.njsproj
+/Vue/books-frontend/*.sln
+/Vue/books-frontend/*.sw?

@@ -4,3 +4,7 @@
 4. powywalaij wszedzie STATIC (WAZNE!!!) DONE
 5. ogarnij nullowalnosc
 6. wszedzie dla PUT (update) dodaj DTO bez id bo to bez sensu jest teraz
+
+CO DO NULLOW:
+ogarnij DTO - dla kazdego entity jedno DTO i dla PUT'ow (updateow) pozwalaj na niewypelnianie wszystkich
+pol ale sprawdzaj te pola i jesli dane pole jest null to po prostu nie bierz go pod uwage
