@@ -1,10 +1,24 @@
 package pl.edu.pwr.ztw.books.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter
 public class Book {
+
     private final int id;
+
+    @Setter
     private String title;
+
+    @Setter
     private Author author;
+
+    @Setter
     private int pages;
+
+    @Setter
     private boolean available;
 
     public Book(int id, String title, Author author, int pages) {
@@ -15,13 +29,4 @@ public class Book {
         this.available = true;
     }
 
-    public int getId() { return id; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public Author getAuthor() { return author; }
-    public void setAuthor(Author author) { this.author = author; }
-    public int getPages() { return pages; }
-    public void setPages(int pages) { this.pages = pages; }
-    public boolean isAvailable() { return available; }
-    public void setAvailable(boolean available) { this.available = available; }
 }
