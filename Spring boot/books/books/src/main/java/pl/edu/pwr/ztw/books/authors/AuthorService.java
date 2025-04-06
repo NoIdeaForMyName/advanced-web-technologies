@@ -8,10 +8,10 @@ import java.util.List;
 
 @Service
 public class AuthorService implements IAuthorService {
-    private static List<Author> authorsRepo = new ArrayList<>();
-    private static int nextId = 1;
+    private static final List<Author> authorsRepo = new ArrayList<>();
+    private static long nextId = 1;
 
-    static {
+    public AuthorService() {
         authorsRepo.add(new Author(nextId++, "Henryk", "Sienkiewicz"));
         authorsRepo.add(new Author(nextId++, "Stanisław", "Reymont"));
         authorsRepo.add(new Author(nextId++, "Adam", "Mickiewicz"));
@@ -23,7 +23,7 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public Author getAuthor(int id) {
+    public Author getAuthor(long id) {
         return authorsRepo.stream()
                 .filter(a -> a.getId() == id)
                 .findFirst()
@@ -38,7 +38,7 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public Author updateAuthor(int id, Author author) {
+    public Author updateAuthor(long id, Author author) {
         Author existingAuthor = getAuthor(id);
         if (existingAuthor != null) {
             existingAuthor.setName(author.getName());
@@ -48,7 +48,7 @@ public class AuthorService implements IAuthorService {
     }
 
     @Override
-    public boolean deleteAuthor(int id) {
+    public boolean deleteAuthor(long id) {
         return authorsRepo.removeIf(a -> a.getId() == id);
     }
 }

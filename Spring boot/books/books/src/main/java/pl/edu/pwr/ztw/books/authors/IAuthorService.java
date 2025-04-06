@@ -4,8 +4,8 @@ import java.util.Collection;
 
 public interface IAuthorService {
     Collection<Author> getAuthors();
-    Author getAuthor(int id);
+    Author getAuthor(long id);
     Author addAuthor(Author author);
-    Author updateAuthor(int id, Author author);
-    boolean deleteAuthor(int id);
+    Author updateAuthor(long id, Author author);
+    boolean deleteAuthor(long id);
 }

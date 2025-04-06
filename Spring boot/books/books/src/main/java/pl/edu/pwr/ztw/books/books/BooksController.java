@@ -1,6 +1,5 @@
 package pl.edu.pwr.ztw.books.books;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,8 +7,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/books")
 public class BooksController {
-    @Autowired
-    IBooksService booksService;
+
+    private final IBooksService booksService;
+
+    public BooksController(IBooksService booksService) {
+        this.booksService = booksService;
+    }
 
     @GetMapping
     public ResponseEntity<Object> getBooks() {

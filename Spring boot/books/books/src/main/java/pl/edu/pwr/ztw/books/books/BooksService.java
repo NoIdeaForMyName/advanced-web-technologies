@@ -1,6 +1,5 @@
 package pl.edu.pwr.ztw.books.books;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.pwr.ztw.books.authors.IAuthorService;
 
@@ -10,18 +9,13 @@ import java.util.List;
 
 @Service
 public class BooksService implements IBooksService {
-    private static List<Book> booksRepo = new ArrayList<>();
-    private static int nextId = 1;
+    private final static List<Book> booksRepo = new ArrayList<>();
+    private static long nextId = 1;
 
-    @Autowired
-    private IAuthorService authorService;
+    //private final IAuthorService authorService;
 
-    static {
-        // We'll initialize books in the constructor after authorService is autowired
-    }
-
-    @Autowired
-    public void init() {
+    public BooksService(IAuthorService authorService) {
+        //this.authorService = authorService;
         if (booksRepo.isEmpty()) {
             booksRepo.add(new Book(nextId++, "Potop", authorService.getAuthor(1), 936));
             booksRepo.add(new Book(nextId++, "Wesele", authorService.getAuthor(2), 150));
@@ -35,7 +29,7 @@ public class BooksService implements IBooksService {
     }
 
     @Override
-    public Book getBook(int id) {
+    public Book getBook(long id) {
         return booksRepo.stream()
                 .filter(b -> b.getId() == id)
                 .findFirst()
@@ -50,7 +44,7 @@ public class BooksService implements IBooksService {
     }
 
     @Override
-    public Book updateBook(int id, Book book) {
+    public Book updateBook(long id, Book book) {
         Book existingBook = getBook(id);
         if (existingBook != null) {
             existingBook.setTitle(book.getTitle());
@@ -61,7 +55,7 @@ public class BooksService implements IBooksService {
     }
 
     @Override
-    public boolean deleteBook(int id) {
+    public boolean deleteBook(long id) {
         return booksRepo.removeIf(b -> b.getId() == id);
     }
 }

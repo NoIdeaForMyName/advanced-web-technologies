@@ -1,0 +1,6 @@
+1. wywalic id z argumentow metod serwisow UPDATE (jednak nie) DONE
+2. zmienic Rental - nie HashMap tylko pojedynczy klucz wartosc DONE
+3. powywalac autowired DONE
+4. powywalaij wszedzie STATIC (WAZNE!!!) DONE
+5. ogarnij nullowalnosc
+6. wszedzie dla PUT (update) dodaj DTO bez id bo to bez sensu jest teraz

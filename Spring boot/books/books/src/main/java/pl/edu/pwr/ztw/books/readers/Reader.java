@@ -9,7 +9,9 @@ import lombok.Setter;
 @Setter
 public class Reader {
 
+    private long id;
     private String name;
+    private String lastName;
     private String email;
 
 }
