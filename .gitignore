@@ -1,1 +1,26 @@
+# Globalne ignore (głównego repozytorium)
 .DS_Store
+
+# Vue project specific
+/Vue/address-book-vue-app/.DS_Store
+/Vue/address-book-vue-app/node_modules
+/Vue/address-book-vue-app/dist
+
+# local env files
+/Vue/address-book-vue-app/.env.local
+/Vue/address-book-vue-app/.env.*.local
+
+# Log files
+/Vue/address-book-vue-app/npm-debug.log*
+/Vue/address-book-vue-app/yarn-debug.log*
+/Vue/address-book-vue-app/yarn-error.log*
+/Vue/address-book-vue-app/pnpm-debug.log*
+
+# Editor directories and files
+/Vue/address-book-vue-app/.idea
+/Vue/address-book-vue-app/.vscode
+/Vue/address-book-vue-app/*.suo
+/Vue/address-book-vue-app/*.ntvs*
+/Vue/address-book-vue-app/*.njsproj
+/Vue/address-book-vue-app/*.sln
+/Vue/address-book-vue-app/*.sw?
