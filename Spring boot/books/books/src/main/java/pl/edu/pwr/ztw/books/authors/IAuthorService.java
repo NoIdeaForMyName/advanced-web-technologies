@@ -1,6 +1,5 @@
-package pl.edu.pwr.ztw.books.services;
+package pl.edu.pwr.ztw.books.authors;
 
-import pl.edu.pwr.ztw.books.models.Author;
 import java.util.Collection;
 
 public interface IAuthorService {

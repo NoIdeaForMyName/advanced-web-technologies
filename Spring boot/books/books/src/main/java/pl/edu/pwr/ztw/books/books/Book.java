@@ -1,7 +1,8 @@
-package pl.edu.pwr.ztw.books.models;
+package pl.edu.pwr.ztw.books.books;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.edu.pwr.ztw.books.authors.Author;
 
 
 @Getter

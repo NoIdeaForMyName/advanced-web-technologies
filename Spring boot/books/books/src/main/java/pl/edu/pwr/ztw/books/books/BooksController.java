@@ -1,11 +1,9 @@
-package pl.edu.pwr.ztw.books.controllers;
+package pl.edu.pwr.ztw.books.books;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.pwr.ztw.books.models.Book;
-import pl.edu.pwr.ztw.books.services.IBooksService;
 
 @RestController
 @RequestMapping("/api/books")

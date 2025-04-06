@@ -1,11 +1,9 @@
-package pl.edu.pwr.ztw.books.controllers;
+package pl.edu.pwr.ztw.books.authors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.pwr.ztw.books.models.Author;
-import pl.edu.pwr.ztw.books.services.IAuthorService;
 
 @RestController
 @RequestMapping("/api/authors")

@@ -1,6 +1,5 @@
-package pl.edu.pwr.ztw.books.services;
+package pl.edu.pwr.ztw.books.books;
 
-import pl.edu.pwr.ztw.books.models.Book;
 import java.util.Collection;
 
 public interface IBooksService {

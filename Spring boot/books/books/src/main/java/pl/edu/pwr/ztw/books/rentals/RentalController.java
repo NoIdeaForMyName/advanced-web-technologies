@@ -1,13 +1,12 @@
-package pl.edu.pwr.ztw.books.controllers;
+package pl.edu.pwr.ztw.books.rentals;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.pwr.ztw.books.models.Book;
-import pl.edu.pwr.ztw.books.models.Reader;
-import pl.edu.pwr.ztw.books.services.IBooksService;
-import pl.edu.pwr.ztw.books.services.RentalService;
+import pl.edu.pwr.ztw.books.books.Book;
+import pl.edu.pwr.ztw.books.readers.Reader;
+import pl.edu.pwr.ztw.books.books.IBooksService;
 
 @RestController
 @RequestMapping("/api/rentals")

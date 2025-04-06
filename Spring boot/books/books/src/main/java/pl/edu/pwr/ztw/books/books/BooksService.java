@@ -1,8 +1,8 @@
-package pl.edu.pwr.ztw.books.services;
+package pl.edu.pwr.ztw.books.books;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.edu.pwr.ztw.books.models.Book;
+import pl.edu.pwr.ztw.books.authors.IAuthorService;
 
 import java.util.ArrayList;
 import java.util.Collection;

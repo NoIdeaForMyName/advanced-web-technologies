@@ -1,9 +1,8 @@
-package pl.edu.pwr.ztw.books.services;
+package pl.edu.pwr.ztw.books.rentals;
 
 import org.springframework.stereotype.Service;
-import pl.edu.pwr.ztw.books.models.Book;
-import pl.edu.pwr.ztw.books.models.Reader;
-import pl.edu.pwr.ztw.books.models.Rental;
+import pl.edu.pwr.ztw.books.books.Book;
+import pl.edu.pwr.ztw.books.readers.Reader;
 
 import java.util.HashMap;
 import java.util.Map;
