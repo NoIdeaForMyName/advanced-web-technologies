@@ -81,13 +81,16 @@ public class RentalService implements IRentalService {
         Rental existingRental = getRental(id);
         if (existingRental != null) {
             existingRental.setReader(rental.getReader() != null ? rental.getReader() : existingRental.getReader());
-            if (existingRental.getBook() != rental.getBook() && rental.getBook() != null) {
+            if (rental.getBook() != null) {
                 existingRental.getBook().setAvailable(true);
                 rental.getBook().setAvailable(false);
             }
             existingRental.setBook(rental.getBook() != null ? rental.getBook() : existingRental.getBook());
             existingRental.setRentalDate(rental.getRentalDate() != null ? rental.getRentalDate() : existingRental.getRentalDate());
-            existingRental.setReturnDate(rental.getReturnDate() != null ? rental.getReturnDate() : existingRental.getReturnDate());
+            existingRental.setReturnDate(rental.getReturnDate());
+
+            if (existingRental.getReturnDate() != null)
+                existingRental.getBook().setAvailable(true);
         }
         return existingRental;
     }

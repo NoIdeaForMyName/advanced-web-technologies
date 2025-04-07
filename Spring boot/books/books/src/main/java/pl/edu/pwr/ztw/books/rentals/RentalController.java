@@ -80,6 +80,7 @@ public class RentalController {
     public ResponseEntity<Object> updateRental(@PathVariable long id, @RequestBody UpdateRentalRequest updateRentalRequest) {
         Reader reader = null;
         Book book = null;
+        Rental currRental = rentalService.getRental(id);
         if (updateRentalRequest.getReaderId() != null) {
             reader = readersService.getReader(updateRentalRequest.getReaderId());
             if (reader == null) {
@@ -91,12 +92,14 @@ public class RentalController {
             if (book == null) {
                 return new ResponseEntity<>("Book not found", HttpStatus.NOT_FOUND);
             }
+            if (currRental != null && currRental.getBook() != book && !book.isAvailable() && updateRentalRequest.getReturnDate() == null)
+                return new ResponseEntity<>("Book is not available", HttpStatus.BAD_REQUEST);
         }
         Rental updatedRental  = new Rental(0, reader, book);
         updatedRental.setRentalDate(updateRentalRequest.getRentalDate());
         updatedRental.setReturnDate(updateRentalRequest.getReturnDate());
         if (rentalService.updateRental(id, updatedRental) != null) {
-            return new ResponseEntity<>("Rental updated successfully", HttpStatus.OK);
+            return new ResponseEntity<>(currRental, HttpStatus.OK);
         }
         return new ResponseEntity<>("Rental not found", HttpStatus.NOT_FOUND);
     }
