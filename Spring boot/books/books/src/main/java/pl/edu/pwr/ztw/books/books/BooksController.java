@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.pwr.ztw.books.PaginatedResponse;
 import pl.edu.pwr.ztw.books.authors.Author;
 import pl.edu.pwr.ztw.books.authors.IAuthorService;
+import pl.edu.pwr.ztw.books.rentals.IRentalService;
+import pl.edu.pwr.ztw.books.rentals.Rental;
 
 @RestController
 @RequestMapping("/api/v1/books")
@@ -13,10 +15,12 @@ public class BooksController {
 
     private final IBooksService booksService;
     private final IAuthorService authorService;
+    private final IRentalService rentalService;
 
-    public BooksController(IBooksService booksService, IAuthorService authorService) {
+    public BooksController(IBooksService booksService, IAuthorService authorService, IRentalService rentalService) {
         this.booksService = booksService;
         this.authorService = authorService;
+        this.rentalService = rentalService;
     }
 
     @GetMapping
@@ -57,6 +61,13 @@ public class BooksController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteBook(@PathVariable("id") int id) {
+        Rental boundRental = rentalService.getRentals().stream()
+                .filter(r -> r.getBook().getId() == id)
+                .findFirst()
+                .orElse(null);
+        if (boundRental != null) {
+            return new ResponseEntity<>("Book is rented", HttpStatus.BAD_REQUEST);
+        }
         if (booksService.deleteBook(id)) {
             return new ResponseEntity<>("Book deleted", HttpStatus.OK);
         }

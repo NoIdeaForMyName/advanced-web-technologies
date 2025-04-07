@@ -5,15 +5,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pwr.ztw.books.PaginatedResponse;
 import pl.edu.pwr.ztw.books.authors.Author;
+import pl.edu.pwr.ztw.books.rentals.IRentalService;
+import pl.edu.pwr.ztw.books.rentals.Rental;
 
 @RestController
 @RequestMapping("api/v1/readers")
 public class ReadersController {
 
     private final IReadersService readerService;
+    private final IRentalService rentalService;
 
-    public ReadersController(IReadersService readerService) {
+    public ReadersController(IReadersService readerService, IRentalService rentalService) {
         this.readerService = readerService;
+        this.rentalService = rentalService;
     }
 
     @GetMapping
@@ -53,6 +57,13 @@ public class ReadersController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteReader(@PathVariable long id) {
+        Rental boundRental = rentalService.getRentals().stream()
+                .filter(r -> r.getReader().getId() == id)
+                .findFirst()
+                .orElse(null);
+        if (boundRental != null) {
+            return new ResponseEntity<>("Reader has rented books", HttpStatus.BAD_REQUEST);
+        }
         if (readerService.deleteReader(id)) {
             return new ResponseEntity<>("Reader deleted", HttpStatus.OK);
         }

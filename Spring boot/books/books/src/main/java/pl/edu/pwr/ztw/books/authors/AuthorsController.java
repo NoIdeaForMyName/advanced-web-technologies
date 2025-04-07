@@ -4,15 +4,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pwr.ztw.books.PaginatedResponse;
+import pl.edu.pwr.ztw.books.books.Book;
+import pl.edu.pwr.ztw.books.books.IBooksService;
+import pl.edu.pwr.ztw.books.rentals.Rental;
 
 @RestController
 @RequestMapping("/api/v1/authors")
 public class AuthorsController {
 
     private final IAuthorService authorService;
+    private final IBooksService booksService;
 
-    public AuthorsController(IAuthorService authorService) {
+    public AuthorsController(IAuthorService authorService, IBooksService booksService) {
         this.authorService = authorService;
+        this.booksService = booksService;
     }
 
     @GetMapping
@@ -52,6 +57,13 @@ public class AuthorsController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAuthor(@PathVariable long id) {
+        Book boundBook = booksService.getBooks().stream()
+                .filter(b -> b.getAuthor().getId() == id)
+                .findFirst()
+                .orElse(null);
+        if (boundBook != null) {
+            return new ResponseEntity<>("Author is bounded to book", HttpStatus.BAD_REQUEST);
+        }
         if (authorService.deleteAuthor(id)) {
             return new ResponseEntity<>("Author deleted", HttpStatus.OK);
         }
