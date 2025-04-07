@@ -2,7 +2,9 @@ package pl.edu.pwr.ztw.books.rentals;
 
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
+import pl.edu.pwr.ztw.books.PaginatedResponse;
 import pl.edu.pwr.ztw.books.activities.ActivityLog;
+import pl.edu.pwr.ztw.books.authors.Author;
 import pl.edu.pwr.ztw.books.books.Book;
 import pl.edu.pwr.ztw.books.books.BooksService;
 import pl.edu.pwr.ztw.books.books.IBooksService;
@@ -26,6 +28,30 @@ public class RentalService implements IRentalService {
         addRentalWithLog(createRental(readerService.getReader(1), booksService.getBook(1)), "System");
         addRentalWithLog(createRental(readerService.getReader(2), booksService.getBook(2)), "System");
         addRentalWithLog(createRental(readerService.getReader(3), booksService.getBook(3)), "System");
+    }
+
+    @Override
+    public PaginatedResponse<Rental> getPaginatedRentals(int page, int perPage) {
+        int totalItems = rentals.size();
+        int totalPages = (int) Math.ceil((double) totalItems / perPage);
+
+        // Zabezpieczenie przed nieprawidłowymi wartościami page
+        page = Math.max(1, Math.min(page, totalPages));
+
+        // Spring Data i większość systemów paginacji używa indeksowania od 0,
+        // ale Twój frontend oczekuje numeracji stron od 1
+        int fromIndex = (page - 1) * perPage;
+        int toIndex = Math.min(fromIndex + perPage, totalItems);
+
+        List<Rental> pageContent = rentals.subList(fromIndex, toIndex);
+
+        return new PaginatedResponse<>(
+                pageContent,
+                page,
+                perPage,
+                totalPages,
+                totalItems
+        );
     }
 
     @Override

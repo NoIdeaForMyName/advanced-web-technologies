@@ -34,15 +34,15 @@
         
         <div class="pagination">
           <button 
-            @click="changePage(pagination.page - 1)" 
-            :disabled="pagination.page === 1"
+            @click="changePage(page - 1)" 
+            :disabled="page === 1"
           >
             Previous
           </button>
-          <span>Page {{ pagination.page }} of {{ Math.ceil(pagination.total / pagination.perPage) }}</span>
+          <span>Page {{ page }} of {{ totalPages }}</span>
           <button 
-            @click="changePage(pagination.page + 1)" 
-            :disabled="pagination.page * pagination.perPage >= pagination.total"
+            @click="changePage(page + 1)" 
+            :disabled="page >= totalPages"
           >
             Next
           </button>
@@ -64,7 +64,7 @@
   </template>
   
   <script>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import useReaders from '@/composables/useReaders'
   import ReaderForm from './ReaderForm.vue'
   
@@ -83,6 +83,11 @@
         updateReader,
         deleteReader
       } = useReaders()
+
+      const page = computed(() => pagination.value.page)
+      const perPage = computed(() => pagination.value.perPage)
+      const total = computed(() => pagination.value.total)
+      const totalPages = computed(() => Math.ceil(total.value / perPage.value))
       
       const showAddModal = ref(false)
       const showEditModal = ref(false)
@@ -129,7 +134,11 @@
         editReader,
         handleUpdateReader,
         deleteReader: deleteReaderHandler,
-        changePage
+        changePage,
+        page,
+        perPage,
+        total,
+        totalPages
       }
     }
   }

@@ -3,6 +3,8 @@ package pl.edu.pwr.ztw.books.readers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pwr.ztw.books.PaginatedResponse;
+import pl.edu.pwr.ztw.books.authors.Author;
 
 @RestController
 @RequestMapping("api/readers")
@@ -15,8 +17,12 @@ public class ReadersController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getReaders() {
-        return new ResponseEntity<>(readerService.getReaders(), HttpStatus.OK);
+    public ResponseEntity<PaginatedResponse<Reader>> getAuthors(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int perPage) {
+
+        PaginatedResponse<Reader> response = readerService.getPaginatedReaders(page, perPage);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

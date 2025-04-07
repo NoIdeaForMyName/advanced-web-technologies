@@ -1,7 +1,7 @@
 import apiClient from './api'
 
 export default {
-  getAuthors(page = 1, perPage = 10) {
+  getAuthors(page = 1, perPage = 2) {
     return apiClient.get(`/authors?page=${page}&per_page=${perPage}`)
   },
 

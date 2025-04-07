@@ -8,19 +8,20 @@ export default function useBooks() {
   const error = ref(null)
   const pagination = ref({
     page: 1,
-    perPage: 10,
+    perPage: 2,
     total: 0
   })
 
-  const fetchBooks = async () => {
+  const fetchBooks = async (page = pagination.value.page) => {
     isLoading.value = true
     try {
+      pagination.value.page = page
       const response = await booksService.getBooks(
         pagination.value.page,
         pagination.value.perPage
       )
-      books.value = response.data
-      pagination.value.total = response.data.total
+      books.value = response.data.data
+      pagination.value.total = response.data.total_items
     } catch (err) {
       error.value = err.message
     } finally {
