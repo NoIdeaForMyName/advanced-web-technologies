@@ -11,7 +11,7 @@ import pl.edu.pwr.ztw.books.books.IBooksService;
 import pl.edu.pwr.ztw.books.readers.ReadersService;
 
 @RestController
-@RequestMapping("/api/rentals")
+@RequestMapping("/api/v1/rentals")
 public class RentalController {
 
     private final RentalService rentalService;

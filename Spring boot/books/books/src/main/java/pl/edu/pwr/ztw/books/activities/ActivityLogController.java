@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/activity")
+@RequestMapping("/api/v1/activity")
 public class ActivityLogController {
 
     @GetMapping
