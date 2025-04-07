@@ -72,7 +72,8 @@ export default function useAuthors() {
       await authorsService.deleteAuthor(id)
       await fetchAuthors()
     } catch (err) {
-      error.value = err.message
+      //error.value = err.message
+      confirm(err.response.data)
     } finally {
       isLoading.value = false
     }

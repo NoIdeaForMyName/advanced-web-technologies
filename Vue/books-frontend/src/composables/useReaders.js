@@ -73,7 +73,8 @@ export default function useReaders() {
       await readersService.deleteReader(id)
       await fetchReaders()
     } catch (err) {
-      error.value = err.message
+      //error.value = err.message
+      confirm(err.response.data)
     } finally {
       isLoading.value = false
     }

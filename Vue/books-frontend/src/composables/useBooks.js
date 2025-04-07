@@ -71,7 +71,8 @@ export default function useBooks() {
       await booksService.deleteBook(id)
       await fetchBooks()
     } catch (err) {
-      error.value = err.message
+      //error.value = err.message
+      confirm(err.response.data)
     } finally {
       isLoading.value = false
     }
