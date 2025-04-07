@@ -9,7 +9,7 @@ export default function useReaders() {
   
   const pagination = ref({
     page: 1,
-    perPage: 2,
+    perPage: 10,
     total: 0
   })
   

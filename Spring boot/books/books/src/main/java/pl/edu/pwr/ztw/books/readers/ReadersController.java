@@ -7,7 +7,7 @@ import pl.edu.pwr.ztw.books.PaginatedResponse;
 import pl.edu.pwr.ztw.books.authors.Author;
 
 @RestController
-@RequestMapping("api/readers")
+@RequestMapping("api/v1/readers")
 public class ReadersController {
 
     private final IReadersService readerService;
@@ -19,7 +19,7 @@ public class ReadersController {
     @GetMapping
     public ResponseEntity<PaginatedResponse<Reader>> getAuthors(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int perPage) {
+            @RequestParam(defaultValue = "10") int perPage) {
 
         PaginatedResponse<Reader> response = readerService.getPaginatedReaders(page, perPage);
         return ResponseEntity.ok(response);

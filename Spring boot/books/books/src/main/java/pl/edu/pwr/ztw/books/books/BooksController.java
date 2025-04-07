@@ -5,21 +5,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.pwr.ztw.books.PaginatedResponse;
 import pl.edu.pwr.ztw.books.authors.Author;
+import pl.edu.pwr.ztw.books.authors.IAuthorService;
 
 @RestController
 @RequestMapping("/api/v1/books")
 public class BooksController {
 
     private final IBooksService booksService;
+    private final IAuthorService authorService;
 
-    public BooksController(IBooksService booksService) {
+    public BooksController(IBooksService booksService, IAuthorService authorService) {
         this.booksService = booksService;
+        this.authorService = authorService;
     }
 
     @GetMapping
     public ResponseEntity<PaginatedResponse<Book>> getAuthors(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int perPage) {
+            @RequestParam(defaultValue = "10") int perPage) {
 
         PaginatedResponse<Book> response = booksService.getPaginatedBooks(page, perPage);
         return ResponseEntity.ok(response);
@@ -35,8 +38,9 @@ public class BooksController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addBook(@RequestBody Book book) {
-        Book newBook = booksService.addBook(book);
+    public ResponseEntity<Object> addBook(@RequestBody CreateBookRequest book) {
+        Author newAuthor = authorService.getAuthor(book.getAuthorId());
+        Book newBook = booksService.addBook(new Book(0, book.getTitle(), newAuthor, book.getPages()));
         if (newBook == null)
             return new ResponseEntity<>("Not all book fields provided", HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(newBook, HttpStatus.CREATED);

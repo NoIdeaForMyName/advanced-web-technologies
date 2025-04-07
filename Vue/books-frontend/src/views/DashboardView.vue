@@ -57,10 +57,10 @@
       const activeRentals = ref(0)
       const readersCount = ref(0)
       
-      const { books, fetchBooks } = useBooks()
-      const { authors, fetchAuthors } = useAuthors()
-      const { rentals, fetchRentals } = useRentals()
-      const { readers, fetchReaders } = useReaders()
+      const { fetchBooks, pagination: paginationBooks } = useBooks()
+      const { fetchAuthors, pagination: paginationAuthors } = useAuthors()
+      const { rentals, fetchRentals, pagination: paginationRentals } = useRentals()
+      const { fetchReaders, pagination: paginationReaders } = useReaders()
       const { 
         activities: activityList, 
         isLoading: isActivitiesLoading, 
@@ -79,10 +79,10 @@
         await fetchReaders()
         await fetchRecentActivities(5)
         
-        bookCount.value = books.value.length
-        authorCount.value = authors.value.length
-        activeRentals.value = rentals.value.filter(r => !r.returnDate).length
-        readersCount.value = readers.value.length
+        bookCount.value = paginationBooks.value.total
+        authorCount.value = paginationAuthors.value.total
+        activeRentals.value = paginationRentals.value.total - rentals.value.filter(r => r.returnDate).length
+        readersCount.value = paginationReaders.value.total
       })
       
       return {

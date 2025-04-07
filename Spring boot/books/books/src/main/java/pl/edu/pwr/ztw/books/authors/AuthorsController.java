@@ -18,7 +18,7 @@ public class AuthorsController {
     @GetMapping
     public ResponseEntity<PaginatedResponse<Author>> getAuthors(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int perPage) {
+            @RequestParam(defaultValue = "10") int perPage) {
 
         PaginatedResponse<Author> response = authorService.getPaginatedAuthors(page, perPage);
         return ResponseEntity.ok(response);

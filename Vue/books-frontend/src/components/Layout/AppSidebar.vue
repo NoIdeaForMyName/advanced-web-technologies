@@ -38,10 +38,10 @@ export default {
       activeRentals: 0
     })
     
-    const { books, fetchBooks } = useBooks()
-    const { authors, fetchAuthors } = useAuthors()
-    const { readers, fetchReaders } = useReaders()
-    const { rentals, fetchRentals } = useRentals()
+    const { fetchBooks, pagination: paginationBooks } = useBooks()
+    const { fetchAuthors, pagination: paginationAuthors } = useAuthors()
+    const { rentals, fetchRentals, pagination: paginationRentals } = useRentals()
+    const { fetchReaders, pagination: paginationReaders } = useReaders()
     
     onMounted(async () => {
       await fetchBooks()
@@ -50,10 +50,10 @@ export default {
       await fetchRentals()
       
       stats.value = {
-        bookCount: books.value.length,
-        authorCount: authors.value.length,
-        readerCount: readers.value.length,
-        activeRentals: rentals.value.filter(r => !r.returnDate).length
+        bookCount: paginationBooks.value.total,
+        authorCount: paginationAuthors.value.total,
+        activeRentals: paginationRentals.value.total - rentals.value.filter(r => r.returnDate).length,
+        readerCount: paginationReaders.value.total
       }
     })
 
