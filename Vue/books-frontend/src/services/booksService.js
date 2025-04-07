@@ -1,7 +1,7 @@
 import apiClient from './api'
 
 export default {
-  getBooks(page = 1, perPage = 2) {
+  getBooks(page = 1, perPage = 10) {
     return apiClient.get(`/books?page=${page}&per_page=${perPage}`)
   },
 

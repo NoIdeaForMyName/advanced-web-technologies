@@ -144,7 +144,7 @@ public class RentalService implements IRentalService {
 
     // Pomocnicza metoda do inicjalizacji
     private void addRentalWithLog(Rental rental, String initiator) {
-        Rental newRental = new Rental(nextId++, rental.getReader(), rental.getBook());
+        Rental newRental = new Rental(rental.getId(), rental.getReader(), rental.getBook());
         rentals.add(newRental);
         new ActivityLog(initiator + " added initial rental '" + newRental.getReader().getName() + " " + newRental.getReader().getLastName() + " rented '" + newRental.getBook().getTitle() + "'");
     }

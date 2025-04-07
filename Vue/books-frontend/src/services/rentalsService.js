@@ -1,7 +1,7 @@
 import apiClient from './api'
 
 export default {
-  getAllRentals(page = 1, perPage = 2) {
+  getAllRentals(page = 1, perPage = 10) {
     return apiClient.get(`/rentals?page=${page}&per_page=${perPage}`)
   },
 

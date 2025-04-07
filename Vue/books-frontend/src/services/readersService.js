@@ -1,7 +1,7 @@
 import apiClient from './api'
 
 export default {
-  getReaders(page = 1, perPage = 2) {
+  getReaders(page = 1, perPage = 10) {
     return apiClient.get(`/readers?page=${page}&per_page=${perPage}`)
   },
 
