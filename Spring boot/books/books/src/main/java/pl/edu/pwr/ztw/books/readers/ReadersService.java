@@ -33,6 +33,8 @@ public class ReadersService implements IReadersService {
 
     @Override
     public Reader addReader(Reader reader) {
+        if (reader.getName() == null || reader.getLastName() == null || reader.getEmail() == null)
+            return null;
         reader = new Reader(nextId++, reader.getName(), reader.getLastName(), reader.getEmail());
         readersRepo.add(reader);
         return reader;
@@ -42,8 +44,8 @@ public class ReadersService implements IReadersService {
     public Reader updateReader(long id, Reader reader) {
         Reader existingReader = getReader(id);
         if (existingReader != null) {
-            existingReader.setName(reader.getName());
-            existingReader.setLastName(reader.getLastName());
+            existingReader.setName(reader.getName() != null ? reader.getName() : existingReader.getName());
+            existingReader.setLastName(reader.getLastName() != null ? reader.getLastName() : existingReader.getLastName());
         }
         return existingReader;
     }

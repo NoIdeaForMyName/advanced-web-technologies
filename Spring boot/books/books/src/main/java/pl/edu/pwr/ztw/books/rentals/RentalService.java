@@ -54,15 +54,15 @@ public class RentalService implements IRentalService {
     }
 
     @Override
-    public Rental addRental(Rental rental) {
-        if (!rental.getBook().isAvailable())
+    public Rental rentBook(Reader reader, Book book) {
+        if (!book.isAvailable())
             return null;
-        Rental newRental = createRental(rental.getReader(), rental.getBook());
+        Rental newRental = createRental(reader, book);
 //        if (rental.getBook() == null || rental.getReader() == null || !rental.getBook().isAvailable()) {
 //            return null;
 //        }
         rentals.add(newRental);
-        rental.getBook().setAvailable(false);
+        book.setAvailable(false);
         return newRental;
     }
 
@@ -80,14 +80,14 @@ public class RentalService implements IRentalService {
     public Rental updateRental(long id, Rental rental) {
         Rental existingRental = getRental(id);
         if (existingRental != null) {
-            existingRental.setReader(rental.getReader());
-            if (existingRental.getBook() != rental.getBook()) {
+            existingRental.setReader(rental.getReader() != null ? rental.getReader() : existingRental.getReader());
+            if (existingRental.getBook() != rental.getBook() && rental.getBook() != null) {
                 existingRental.getBook().setAvailable(true);
                 rental.getBook().setAvailable(false);
             }
-            existingRental.setBook(rental.getBook());
-            existingRental.setRentalDate(rental.getRentalDate());
-            existingRental.setReturnDate(rental.getReturnDate());
+            existingRental.setBook(rental.getBook() != null ? rental.getBook() : existingRental.getBook());
+            existingRental.setRentalDate(rental.getRentalDate() != null ? rental.getRentalDate() : existingRental.getRentalDate());
+            existingRental.setReturnDate(rental.getReturnDate() != null ? rental.getReturnDate() : existingRental.getReturnDate());
         }
         return existingRental;
     }

@@ -30,7 +30,10 @@ public class BooksController {
 
     @PostMapping
     public ResponseEntity<Object> addBook(@RequestBody Book book) {
-        return new ResponseEntity<>(booksService.addBook(book), HttpStatus.CREATED);
+        Book newBook = booksService.addBook(book);
+        if (newBook == null)
+            return new ResponseEntity<>("Not all book fields provided", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(newBook, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

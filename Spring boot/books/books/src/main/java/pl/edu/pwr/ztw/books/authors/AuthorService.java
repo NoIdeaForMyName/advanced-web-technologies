@@ -32,6 +32,8 @@ public class AuthorService implements IAuthorService {
 
     @Override
     public Author addAuthor(Author author) {
+        if (author.getName() == null || author.getLastName() == null)
+            return null;
         author = new Author(nextId++, author.getName(), author.getLastName());
         authorsRepo.add(author);
         return author;
@@ -41,8 +43,8 @@ public class AuthorService implements IAuthorService {
     public Author updateAuthor(long id, Author author) {
         Author existingAuthor = getAuthor(id);
         if (existingAuthor != null) {
-            existingAuthor.setName(author.getName());
-            existingAuthor.setLastName(author.getLastName());
+            existingAuthor.setName(author.getName() != null ? author.getName() : existingAuthor.getName());
+            existingAuthor.setLastName(author.getLastName() != null ? author.getLastName() : existingAuthor.getLastName());
         }
         return existingAuthor;
     }

@@ -12,10 +12,10 @@ public class Book {
     private long id;
     private String title;
     private Author author;
-    private int pages;
+    private Integer pages;
     private boolean available;
 
-    public Book(long id, String title, Author author, int pages) {
+    public Book(long id, String title, Author author, Integer pages) {
         this.id = id;
         this.title = title;
         this.author = author;

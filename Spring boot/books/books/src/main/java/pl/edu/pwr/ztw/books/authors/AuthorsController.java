@@ -30,7 +30,10 @@ public class AuthorsController {
 
     @PostMapping
     public ResponseEntity<Object> addAuthor(@RequestBody Author author) {
-        return new ResponseEntity<>(authorService.addAuthor(author), HttpStatus.CREATED);
+        Author newAuthor = authorService.addAuthor(author);
+        if (newAuthor == null)
+            return new ResponseEntity<>("Not all author fields provided", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(newAuthor, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

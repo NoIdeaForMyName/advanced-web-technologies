@@ -38,6 +38,8 @@ public class BooksService implements IBooksService {
 
     @Override
     public Book addBook(Book book) {
+        if (book.getTitle() == null || book.getAuthor() == null || book.getPages() == null)
+            return null;
         book = new Book(nextId++, book.getTitle(), book.getAuthor(), book.getPages());
         booksRepo.add(book);
         return book;
@@ -47,9 +49,9 @@ public class BooksService implements IBooksService {
     public Book updateBook(long id, Book book) {
         Book existingBook = getBook(id);
         if (existingBook != null) {
-            existingBook.setTitle(book.getTitle());
-            existingBook.setAuthor(book.getAuthor());
-            existingBook.setPages(book.getPages());
+            existingBook.setTitle(book.getTitle() != null ? book.getTitle() : existingBook.getTitle());
+            existingBook.setAuthor(book.getAuthor() != null ? book.getAuthor() : existingBook.getAuthor());
+            existingBook.setPages(book.getPages() != null ? book.getPages() : existingBook.getPages());
         }
         return existingBook;
     }

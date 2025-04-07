@@ -48,7 +48,7 @@ public class RentalController {
         if (book == null) {
             return new ResponseEntity<>("Book not found", HttpStatus.NOT_FOUND);
         }
-        if (rentalService.addRental(new Rental(0, reader, book)) != null) {
+        if (rentalService.rentBook(reader, book) != null) {
             return new ResponseEntity<>("Book rented successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("Book is not available", HttpStatus.BAD_REQUEST);
@@ -77,19 +77,25 @@ public class RentalController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateRental(@PathVariable long rentalId, @RequestBody UpdateRentalRequest updateRentalRequest) {
-        Reader reader = readersService.getReader(updateRentalRequest.getReaderId());
-        if (reader == null) {
-            return new ResponseEntity<>("Reader not found", HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> updateRental(@PathVariable long id, @RequestBody UpdateRentalRequest updateRentalRequest) {
+        Reader reader = null;
+        Book book = null;
+        if (updateRentalRequest.getReaderId() != null) {
+            reader = readersService.getReader(updateRentalRequest.getReaderId());
+            if (reader == null) {
+                return new ResponseEntity<>("Reader not found", HttpStatus.NOT_FOUND);
+            }
         }
-        Book book = booksService.getBook(updateRentalRequest.getBookId());
-        if (book == null) {
-            return new ResponseEntity<>("Book not found", HttpStatus.NOT_FOUND);
+        if (updateRentalRequest.getBookId() != null) {
+            book = booksService.getBook(updateRentalRequest.getBookId());
+            if (book == null) {
+                return new ResponseEntity<>("Book not found", HttpStatus.NOT_FOUND);
+            }
         }
         Rental updatedRental  = new Rental(0, reader, book);
         updatedRental.setRentalDate(updateRentalRequest.getRentalDate());
         updatedRental.setReturnDate(updateRentalRequest.getReturnDate());
-        if (rentalService.updateRental(rentalId, updatedRental) != null) {
+        if (rentalService.updateRental(id, updatedRental) != null) {
             return new ResponseEntity<>("Rental updated successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("Rental not found", HttpStatus.NOT_FOUND);

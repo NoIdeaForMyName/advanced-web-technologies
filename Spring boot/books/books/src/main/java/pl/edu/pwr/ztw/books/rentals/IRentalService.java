@@ -10,7 +10,7 @@ public interface IRentalService {
     Collection<Rental> getRentals();
     Rental getRental(long id);
     Reader getBookRenter(long id);
-    Rental addRental(Rental rental);
+    Rental rentBook(Reader reader, Book book);
     Rental endRental(long id);
     Rental updateRental(long id, Rental rental);
     boolean deleteRental(long id);

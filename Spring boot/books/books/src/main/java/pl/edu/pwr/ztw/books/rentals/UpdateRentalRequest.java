@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 public class UpdateRentalRequest {
-    long readerId;
-    long bookId;
+    Long readerId;
+    Long bookId;
     LocalDateTime rentalDate;
     LocalDateTime returnDate;
 }

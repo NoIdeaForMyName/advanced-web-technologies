@@ -30,7 +30,10 @@ public class ReadersController {
 
     @PostMapping
     public ResponseEntity<Object> addReader(@RequestBody Reader reader) {
-        return new ResponseEntity<>(readerService.addReader(reader), HttpStatus.CREATED);
+        Reader newReader = readerService.addReader(reader);
+        if (newReader == null)
+            return new ResponseEntity<>("Not all reader fields provided", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(newReader, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

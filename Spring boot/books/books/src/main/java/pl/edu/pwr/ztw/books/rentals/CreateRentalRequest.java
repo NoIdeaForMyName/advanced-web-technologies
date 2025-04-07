@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CreateRentalRequest {
-    long readerId;
-    long bookId;
+    Long readerId;
+    Long bookId;
 }
