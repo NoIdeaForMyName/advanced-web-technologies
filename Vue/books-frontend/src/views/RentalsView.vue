@@ -5,7 +5,7 @@
   </template>
   
   <script>
-  import RentalList from '../components/RentalList.vue'
+  import RentalList from '@/components/RentalList.vue'
   
   export default {
     components: { RentalList }

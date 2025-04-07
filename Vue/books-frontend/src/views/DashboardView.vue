@@ -12,6 +12,10 @@
         <p>{{ authorCount }}</p>
       </div>
       <div class="stat-card">
+        <h3>Total Readers</h3>
+        <p>{{ readersCount }}</p>
+      </div>
+      <div class="stat-card">
         <h3>Active Rentals</h3>
         <p>{{ activeRentals }}</p>
       </div>
@@ -40,20 +44,23 @@
   
 <script>
   import { ref, onMounted } from 'vue'
-  import useBooks from '../composables/useBooks'
-  import useAuthors from '../composables/useAuthors'
-  import useRentals from '../composables/useRentals'
-  import useActivities from '../composables/useActivities'
+  import useBooks from '@/composables/useBooks'
+  import useAuthors from '@/composables/useAuthors'
+  import useRentals from '@/composables/useRentals'
+  import useReaders from '@/composables/useReaders'
+  import useActivities from '@/composables/useActivities'
   
   export default {
     setup() {
       const bookCount = ref(0)
       const authorCount = ref(0)
       const activeRentals = ref(0)
+      const readersCount = ref(0)
       
       const { books, fetchBooks } = useBooks()
       const { authors, fetchAuthors } = useAuthors()
       const { rentals, fetchRentals } = useRentals()
+      const { readers, fetchReaders } = useReaders()
       const { 
         activities: activityList, 
         isLoading: isActivitiesLoading, 
@@ -69,17 +76,20 @@
         await fetchBooks()
         await fetchAuthors()
         await fetchRentals()
+        await fetchReaders()
         await fetchRecentActivities(5)
         
         bookCount.value = books.value.length
         authorCount.value = authors.value.length
-        activeRentals.value = rentals.value.filter(r => !r.returned).length
+        activeRentals.value = rentals.value.filter(r => !r.returnDate).length
+        readersCount.value = readers.value.length
       })
       
       return {
         bookCount,
         authorCount,
         activeRentals,
+        readersCount,
         activityList,
         isActivitiesLoading,
         activitiesError,

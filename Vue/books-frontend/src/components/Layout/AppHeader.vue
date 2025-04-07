@@ -5,6 +5,7 @@
         <router-link to="/">Dashboard</router-link>
         <router-link to="/books">Books</router-link>
         <router-link to="/authors">Authors</router-link>
+        <router-link to="/readers">Readers</router-link>
         <router-link to="/rentals">Rentals</router-link>
       </nav>
     </header>

@@ -1,8 +1,12 @@
 package pl.edu.pwr.ztw.books.rentals;
 
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
+import pl.edu.pwr.ztw.books.activities.ActivityLog;
 import pl.edu.pwr.ztw.books.books.Book;
 import pl.edu.pwr.ztw.books.books.BooksService;
+import pl.edu.pwr.ztw.books.books.IBooksService;
+import pl.edu.pwr.ztw.books.readers.IReadersService;
 import pl.edu.pwr.ztw.books.readers.Reader;
 import pl.edu.pwr.ztw.books.readers.ReadersService;
 
@@ -16,9 +20,12 @@ public class RentalService implements IRentalService {
     private static long nextId = 1;
 
     public RentalService(ReadersService readerService, BooksService booksService) {
-        rentals.add(createRental(readerService.getReader(1), booksService.getBook(1)));
-        rentals.add(createRental(readerService.getReader(2), booksService.getBook(2)));
-        rentals.add(createRental(readerService.getReader(3), booksService.getBook(3)));
+        //rentals.add(createRental(readerService.getReader(1), booksService.getBook(1)));
+        //rentals.add(createRental(readerService.getReader(2), booksService.getBook(2)));
+        //rentals.add(createRental(readerService.getReader(3), booksService.getBook(3)));
+        addRentalWithLog(createRental(readerService.getReader(1), booksService.getBook(1)), "System");
+        addRentalWithLog(createRental(readerService.getReader(2), booksService.getBook(2)), "System");
+        addRentalWithLog(createRental(readerService.getReader(3), booksService.getBook(3)), "System");
     }
 
     @Override
@@ -61,6 +68,7 @@ public class RentalService implements IRentalService {
 //        }
         rentals.add(newRental);
         book.setAvailable(false);
+        new ActivityLog(reader.getName() + " " + reader.getLastName() + " rented '" + book.getTitle() + "'");
         return newRental;
     }
 
@@ -70,6 +78,7 @@ public class RentalService implements IRentalService {
         if (toEndRental != null) {
             toEndRental.setReturnDate(LocalDateTime.now());
             toEndRental.getBook().setAvailable(true);
+            new ActivityLog(toEndRental.getReader().getName() + " " + toEndRental.getReader().getLastName() + " returned '" + toEndRental.getBook().getTitle() + "'");
         }
         return toEndRental;
     }
@@ -78,6 +87,7 @@ public class RentalService implements IRentalService {
     public Rental updateRental(long id, Rental rental) {
         Rental existingRental = getRental(id);
         if (existingRental != null) {
+            String oldRental = existingRental.getReader().getName() + " " + existingRental.getReader().getLastName() + " rented '" + existingRental.getBook().getTitle() + "'";
             existingRental.setReader(rental.getReader() != null ? rental.getReader() : existingRental.getReader());
             if (rental.getBook() != null) {
                 existingRental.getBook().setAvailable(true);
@@ -89,13 +99,28 @@ public class RentalService implements IRentalService {
 
             if (existingRental.getReturnDate() != null)
                 existingRental.getBook().setAvailable(true);
+
+            new ActivityLog("Updated rental: " + oldRental + " /nto " + existingRental.getReader().getName() + " " + existingRental.getReader().getLastName() + " rented '" + existingRental.getBook().getTitle() + "'");
         }
         return existingRental;
     }
 
     @Override
     public boolean deleteRental(long id) {
+        Rental toDeleteRental = getRental(id);
+        if (toDeleteRental != null) {
+            toDeleteRental.setReturnDate(LocalDateTime.now());
+            toDeleteRental.getBook().setAvailable(true);
+            new ActivityLog("Rental deleted: " + toDeleteRental.getReader().getName() + " " + toDeleteRental.getReader().getLastName() + " rented '" + toDeleteRental.getBook().getTitle() + "'");
+        }
         return rentals.removeIf(r -> r.getId() == id);
+    }
+
+    // Pomocnicza metoda do inicjalizacji
+    private void addRentalWithLog(Rental rental, String initiator) {
+        Rental newRental = new Rental(nextId++, rental.getReader(), rental.getBook());
+        rentals.add(newRental);
+        new ActivityLog(initiator + " added initial rental '" + newRental.getReader().getName() + " " + newRental.getReader().getLastName() + " rented '" + newRental.getBook().getTitle() + "'");
     }
 
 //    public boolean rentBook(Book book, Reader reader) {

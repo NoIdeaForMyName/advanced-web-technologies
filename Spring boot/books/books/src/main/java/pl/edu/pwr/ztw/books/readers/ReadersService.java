@@ -1,6 +1,10 @@
 package pl.edu.pwr.ztw.books.readers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.edu.pwr.ztw.books.activities.ActivityLog;
+import pl.edu.pwr.ztw.books.authors.Author;
+import pl.edu.pwr.ztw.books.books.Book;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,9 +17,18 @@ public class ReadersService implements IReadersService {
     private static long nextId = 1;
 
     public ReadersService() {
-        readersRepo.add(new Reader(nextId++, "Adam", "Abak", "adam.abak@example.com"));
-        readersRepo.add(new Reader(nextId++, "Mateusz", "Kamiński", "mateusz.kaminski@example.com"));
-        readersRepo.add(new Reader(nextId++, "Olaf", "Nowak", "olaf.nowak@example.com"));
+        //readersRepo.add(new Reader(nextId++, "Adam", "Abak", "adam.abak@example.com"));
+        //readersRepo.add(new Reader(nextId++, "Mateusz", "Kamiński", "mateusz.kaminski@example.com"));
+        //readersRepo.add(new Reader(nextId++, "Olaf", "Nowak", "olaf.nowak@example.com"));
+    }
+
+    @Autowired
+    public void init() {
+        if (readersRepo.isEmpty()) {
+            addReaderWithLog(new Reader(0, "Adam", "Abak", "adam.abak@example.com"), "System");
+            addReaderWithLog(new Reader(0, "Mateusz", "Kamiński", "mateusz.kaminski@example.com"), "System");
+            addReaderWithLog(new Reader(0, "Olaf", "Nowak", "olaf.nowak@example.com"), "System");
+        }
     }
 
     @Override
@@ -37,6 +50,7 @@ public class ReadersService implements IReadersService {
             return null;
         reader = new Reader(nextId++, reader.getName(), reader.getLastName(), reader.getEmail());
         readersRepo.add(reader);
+        new ActivityLog("Added new reader '" + reader.getName() + reader.getLastName() + "'");
         return reader;
     }
 
@@ -44,14 +58,29 @@ public class ReadersService implements IReadersService {
     public Reader updateReader(long id, Reader reader) {
         Reader existingReader = getReader(id);
         if (existingReader != null) {
+            String oldReder = existingReader.getName() + " " + existingReader.getLastName();
             existingReader.setName(reader.getName() != null ? reader.getName() : existingReader.getName());
             existingReader.setLastName(reader.getLastName() != null ? reader.getLastName() : existingReader.getLastName());
+            new ActivityLog("Updated reader '" + oldReder + "' to '" + reader.getName() + reader.getLastName() + "'");
         }
         return existingReader;
     }
 
     @Override
     public boolean deleteReader(long id) {
-        return readersRepo.removeIf(r -> r.getId() == id);
+        //return readersRepo.removeIf(r -> r.getId() == id);
+        Reader readerToRemove = getReader(id);
+        if (readerToRemove != null && readersRepo.removeIf(r -> r.getId() == id)) {
+            new ActivityLog("Deleted reader '" + readerToRemove.getName() + " " + readerToRemove.getLastName() + "'");
+            return true;
+        }
+        return false;
+    }
+
+    // Pomocnicza metoda do inicjalizacji
+    private void addReaderWithLog(Reader reader, String initiator) {
+        Reader newReader = new Reader(nextId++, reader.getName(), reader.getLastName(), reader.getEmail());
+        readersRepo.add(newReader);
+        new ActivityLog(initiator + " added initial reader '" + newReader.getName() + " " + newReader.getLastName() + "'");
     }
 }

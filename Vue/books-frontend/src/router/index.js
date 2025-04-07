@@ -3,6 +3,7 @@ import DashboardView from '@/views/DashboardView.vue'
 import BooksView from '@/views/BooksView.vue'
 import AuthorsView from '@/views/AuthorsView.vue'
 import RentalsView from '@/views/RentalsView.vue'
+import ReadersView from '@/views/ReadersView.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/rentals',
     name: 'rentals',
     component: RentalsView
+  },
+  {
+    path: '/readers',
+    name: 'readers',
+    component: ReadersView
   }
 ]
 

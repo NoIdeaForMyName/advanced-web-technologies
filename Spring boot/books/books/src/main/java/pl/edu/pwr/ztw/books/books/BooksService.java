@@ -1,6 +1,7 @@
 package pl.edu.pwr.ztw.books.books;
 
 import org.springframework.stereotype.Service;
+import pl.edu.pwr.ztw.books.activities.ActivityLog;
 import pl.edu.pwr.ztw.books.authors.IAuthorService;
 
 import java.util.ArrayList;
@@ -17,9 +18,12 @@ public class BooksService implements IBooksService {
     public BooksService(IAuthorService authorService) {
         //this.authorService = authorService;
         if (booksRepo.isEmpty()) {
-            booksRepo.add(new Book(nextId++, "Potop", authorService.getAuthor(1), 936));
-            booksRepo.add(new Book(nextId++, "Wesele", authorService.getAuthor(2), 150));
-            booksRepo.add(new Book(nextId++, "Dziady", authorService.getAuthor(3), 292));
+            //booksRepo.add(new Book(nextId++, "Potop", authorService.getAuthor(1), 936));
+            //booksRepo.add(new Book(nextId++, "Wesele", authorService.getAuthor(2), 150));
+            //booksRepo.add(new Book(nextId++, "Dziady", authorService.getAuthor(3), 292));
+            addBookWithLog(new Book(0, "Potop", authorService.getAuthor(1), 936), "System");
+            addBookWithLog(new Book(0, "Wesele", authorService.getAuthor(2), 150), "System");
+            addBookWithLog(new Book(0, "Dziady", authorService.getAuthor(3), 292), "System");
         }
     }
 
@@ -42,6 +46,7 @@ public class BooksService implements IBooksService {
             return null;
         book = new Book(nextId++, book.getTitle(), book.getAuthor(), book.getPages());
         booksRepo.add(book);
+        new ActivityLog("Added new book '" + book.getTitle() + "'");
         return book;
     }
 
@@ -49,15 +54,30 @@ public class BooksService implements IBooksService {
     public Book updateBook(long id, Book book) {
         Book existingBook = getBook(id);
         if (existingBook != null) {
+            String oldTitle = existingBook.getTitle();
             existingBook.setTitle(book.getTitle() != null ? book.getTitle() : existingBook.getTitle());
             existingBook.setAuthor(book.getAuthor() != null ? book.getAuthor() : existingBook.getAuthor());
             existingBook.setPages(book.getPages() != null ? book.getPages() : existingBook.getPages());
+            new ActivityLog("Updated book from '" + oldTitle + "' to '" + book.getTitle() + "'");
         }
         return existingBook;
     }
 
     @Override
     public boolean deleteBook(long id) {
-        return booksRepo.removeIf(b -> b.getId() == id);
+        //return booksRepo.removeIf(b -> b.getId() == id);
+        Book bookToRemove = getBook(id);
+        if (bookToRemove != null && booksRepo.removeIf(b -> b.getId() == id)) {
+            new ActivityLog("Deleted book '" + bookToRemove.getTitle() + "'");
+            return true;
+        }
+        return false;
+    }
+
+    // Pomocnicza metoda do inicjalizacji
+    private void addBookWithLog(Book book, String initiator) {
+        Book newBook = new Book(nextId++, book.getTitle(), book.getAuthor(), book.getPages());
+        booksRepo.add(newBook);
+        new ActivityLog(initiator + " added initial book '" + newBook.getTitle() + "'");
     }
 }

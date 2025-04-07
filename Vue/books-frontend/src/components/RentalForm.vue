@@ -9,28 +9,38 @@
           <select id="book" v-model="formData.bookId" required>
             <option value="">Select Book</option>
             <option 
-              v-for="book in books.filter(b => b.available)" 
+              v-for="book in availableBooks" 
               :key="book.id" 
               :value="book.id"
+              :selected="rental && book.id === rental.book.id"
             >
               {{ book.title }} ({{ book.author ? `${book.author.name} ${book.author.lastName}` : 'N/A' }})
             </option>
           </select>
         </div>
-        
+
         <div class="form-group">
-          <label for="name">Your Name:</label>
-          <input id="name" v-model="formData.reader.name" required>
+          <label for="reader">Reader:</label>
+          <select id="reader" v-model="formData.readerId" required>
+            <option value="">Select Reader</option>
+            <option 
+              v-for="reader in readers" 
+              :key="reader.id" 
+              :value="reader.id"
+            >
+              {{ reader.name }} {{ reader.lastName }} ({{ reader.email }})
+            </option>
+          </select>
         </div>
-        
-        <div class="form-group">
-          <label for="email">Your Email:</label>
-          <input id="email" type="email" v-model="formData.reader.email" required>
+
+        <div v-if="rental" class="form-group">
+          <label>Rental Date:</label>
+          <p>{{ formatDate(rental.rentalDate) }}</p>
         </div>
         
         <div class="form-actions">
           <button type="button" @click="close">Cancel</button>
-          <button type="submit">Rent Book</button>
+          <button type="submit">{{ rental ? 'Update' : 'Rent' }}</button>
         </div>
       </form>
     </div>
@@ -38,38 +48,74 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import useBooks from '@/composables/useBooks'
+import useReaders from '@/composables/useReaders'
 
 export default {
-  emits: ['close', 'rent'],
+  props: {
+    rental: {
+      type: Object,
+      default: null
+    }
+  },
+  emits: ['close', 'rent', 'save'],
   setup(props, { emit }) {
     const { books, fetchBooks } = useBooks()
+    const { readers, fetchReaders } = useReaders()
     const formData = ref({
       bookId: '',
-      reader: {
-        name: '',
-        email: ''
-      }
+      readerId: '',
+      returnDate: ''
     })
     
     onMounted(async () => {
       await fetchBooks()
+      await fetchReaders()
+
+      if (props.rental) {
+        formData.value = {
+          bookId: props.rental.book.id,
+          readerId: props.rental.reader.id,
+          returnDate: props.rental.returnDate || ''
+        }
+      }
+    })
+
+    const availableBooks = computed(() => {
+      // Uwzględnij książkę, która jest już wypożyczona (dla edycji)
+      return books.value.filter(book => 
+        book.available || 
+        (props.rental && book.id === props.rental.book.id)
+      )
     })
     
     const submitForm = () => {
-      emit('rent', formData.value.bookId, formData.value.reader)
+      if (props.rental) {
+        emit('save', formData.value)
+      } else {
+        const selectedReader = readers.value.find(r => r.id === formData.value.readerId)
+        emit('rent', formData.value.bookId, selectedReader)
+      }
     }
     
     const close = () => {
       emit('close')
     }
+
+    const formatDate = (dateString) => {
+      if (!dateString) return 'N/A'
+      const date = new Date(dateString)
+      return date.toLocaleDateString()
+    }
     
     return {
       formData,
-      books,
+      availableBooks,
+      readers,
       submitForm,
-      close
+      close,
+      formatDate
     }
   }
 }

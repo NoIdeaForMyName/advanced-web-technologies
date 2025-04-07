@@ -5,6 +5,7 @@
       <ul>
         <li><button @click="navigateToAddBook">Add New Book</button></li>
         <li><button @click="navigateToAddAuthor">Add New Author</button></li>
+        <li><button @click="navigateToAddReader">Add New Reader</button></li>
         <li><button @click="navigateToRentBook">Rent a Book</button></li>
       </ul>
       
@@ -12,6 +13,7 @@
       <ul>
         <li>Books: {{ stats.bookCount }}</li>
         <li>Authors: {{ stats.authorCount }}</li>
+        <li>Readers: {{ stats.readerCount }}</li>
         <li>Active Rentals: {{ stats.activeRentals }}</li>
       </ul>
     </div>
@@ -23,6 +25,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import useBooks from '@/composables/useBooks'
 import useAuthors from '@/composables/useAuthors'
+import useReaders from '@/composables/useReaders'
 import useRentals from '@/composables/useRentals'
 
 export default {
@@ -31,22 +34,26 @@ export default {
     const stats = ref({
       bookCount: 0,
       authorCount: 0,
+      readerCount: 0,
       activeRentals: 0
     })
     
     const { books, fetchBooks } = useBooks()
     const { authors, fetchAuthors } = useAuthors()
+    const { readers, fetchReaders } = useReaders()
     const { rentals, fetchRentals } = useRentals()
     
     onMounted(async () => {
       await fetchBooks()
       await fetchAuthors()
+      await fetchReaders()
       await fetchRentals()
       
       stats.value = {
         bookCount: books.value.length,
         authorCount: authors.value.length,
-        activeRentals: rentals.value.filter(r => !r.returned).length
+        readerCount: readers.value.length,
+        activeRentals: rentals.value.filter(r => !r.returnDate).length
       }
     })
 
@@ -75,6 +82,17 @@ export default {
       });
     }
 
+    const navigateToAddReader = () => {
+      router.push('/readers').then(() => {
+        setTimeout(() => {
+          const addButton = document.querySelector('.reader-list button');
+          if (addButton) {
+            addButton.click();
+          }
+        }, 100);
+      });
+    }
+
     const navigateToRentBook = () => {
       router.push('/rentals').then(() => {
         setTimeout(() => {
@@ -90,6 +108,7 @@ export default {
       stats,
       navigateToAddBook,
       navigateToAddAuthor,
+      navigateToAddReader,
       navigateToRentBook
     }
   }

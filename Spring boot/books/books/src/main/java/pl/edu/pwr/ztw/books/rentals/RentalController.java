@@ -1,5 +1,6 @@
 package pl.edu.pwr.ztw.books.rentals;
 
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +9,6 @@ import pl.edu.pwr.ztw.books.books.BooksService;
 import pl.edu.pwr.ztw.books.readers.Reader;
 import pl.edu.pwr.ztw.books.books.IBooksService;
 import pl.edu.pwr.ztw.books.readers.ReadersService;
-
 
 @RestController
 @RequestMapping("/api/rentals")
