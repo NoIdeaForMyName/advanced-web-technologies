@@ -2,6 +2,7 @@ package pl.edu.pwr.ztw.books.authors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.edu.pwr.ztw.books.PaginatedResponse;
 import pl.edu.pwr.ztw.books.activities.ActivityLog;
 
 import java.util.ArrayList;
@@ -28,6 +29,30 @@ public class AuthorService implements IAuthorService {
             addAuthorWithLog(new Author(0, "Stanisław", "Reymont"), "System");
             addAuthorWithLog(new Author(0, "Adam", "Mickiewicz"), "System");
         }
+    }
+
+    @Override
+    public PaginatedResponse<Author> getPaginatedAuthors(int page, int perPage) {
+        int totalItems = authorsRepo.size();
+        int totalPages = (int) Math.ceil((double) totalItems / perPage);
+
+        // Zabezpieczenie przed nieprawidłowymi wartościami page
+        page = Math.max(1, Math.min(page, totalPages));
+
+        // Spring Data i większość systemów paginacji używa indeksowania od 0,
+        // ale Twój frontend oczekuje numeracji stron od 1
+        int fromIndex = (page - 1) * perPage;
+        int toIndex = Math.min(fromIndex + perPage, totalItems);
+
+        List<Author> pageContent = authorsRepo.subList(fromIndex, toIndex);
+
+        return new PaginatedResponse<>(
+                pageContent,
+                page,
+                perPage,
+                totalPages,
+                totalItems
+        );
     }
 
     @Override

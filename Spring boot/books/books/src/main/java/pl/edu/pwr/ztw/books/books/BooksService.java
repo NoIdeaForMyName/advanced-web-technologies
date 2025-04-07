@@ -1,7 +1,9 @@
 package pl.edu.pwr.ztw.books.books;
 
 import org.springframework.stereotype.Service;
+import pl.edu.pwr.ztw.books.PaginatedResponse;
 import pl.edu.pwr.ztw.books.activities.ActivityLog;
+import pl.edu.pwr.ztw.books.authors.Author;
 import pl.edu.pwr.ztw.books.authors.IAuthorService;
 
 import java.util.ArrayList;
@@ -25,6 +27,30 @@ public class BooksService implements IBooksService {
             addBookWithLog(new Book(0, "Wesele", authorService.getAuthor(2), 150), "System");
             addBookWithLog(new Book(0, "Dziady", authorService.getAuthor(3), 292), "System");
         }
+    }
+
+    @Override
+    public PaginatedResponse<Book> getPaginatedBooks(int page, int perPage) {
+        int totalItems = booksRepo.size();
+        int totalPages = (int) Math.ceil((double) totalItems / perPage);
+
+        // Zabezpieczenie przed nieprawidłowymi wartościami page
+        page = Math.max(1, Math.min(page, totalPages));
+
+        // Spring Data i większość systemów paginacji używa indeksowania od 0,
+        // ale Twój frontend oczekuje numeracji stron od 1
+        int fromIndex = (page - 1) * perPage;
+        int toIndex = Math.min(fromIndex + perPage, totalItems);
+
+        List<Book> pageContent = booksRepo.subList(fromIndex, toIndex);
+
+        return new PaginatedResponse<>(
+                pageContent,
+                page,
+                perPage,
+                totalPages,
+                totalItems
+        );
     }
 
     @Override

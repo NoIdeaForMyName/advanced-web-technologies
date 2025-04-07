@@ -32,15 +32,15 @@
         
         <div class="pagination">
           <button 
-            @click="changePage(pagination.page - 1)" 
-            :disabled="pagination.page === 1"
+            @click="changePage(page - 1)" 
+            :disabled="page === 1"
           >
             Previous
           </button>
-          <span>Page {{ pagination.page }} of {{ Math.ceil(pagination.total / pagination.perPage) }}</span>
+          <span>Page {{ page }} of {{ totalPages }}</span>
           <button 
-            @click="changePage(pagination.page + 1)" 
-            :disabled="pagination.page * pagination.perPage >= pagination.total"
+            @click="changePage(page + 1)" 
+            :disabled="page >= totalPages"
           >
             Next
           </button>
@@ -62,7 +62,7 @@
   </template>
   
   <script>
-  import { ref, onMounted } from 'vue'
+  import { ref, onMounted, computed } from 'vue'
   import useAuthors from '@/composables/useAuthors'
   import AuthorForm from './AuthorForm.vue'
   
@@ -81,6 +81,11 @@
         updateAuthor,
         deleteAuthor
       } = useAuthors()
+
+      const page = computed(() => pagination.value.page)
+      const perPage = computed(() => pagination.value.perPage)
+      const total = computed(() => pagination.value.total)
+      const totalPages = computed(() => Math.ceil(total.value / perPage.value))
       
       const showAddModal = ref(false)
       const showEditModal = ref(false)
@@ -109,11 +114,12 @@
       }
       
       const changePage = (page) => {
-        if (page >= 1 && page <= Math.ceil(pagination.value.total / pagination.value.perPage)) {
-          pagination.value.page = page
-          fetchAuthors()
+        const maxPage = Math.ceil(pagination.value.total / pagination.value.perPage)
+        if (page >= 1 && page <= maxPage) {
+          fetchAuthors(page)
         }
       }
+
       
       return {
         authors,
@@ -127,7 +133,11 @@
         editAuthor,
         handleUpdateAuthor,
         deleteAuthor: deleteAuthorHandler,
-        changePage
+        changePage,
+        page,
+        perPage,
+        total,
+        totalPages
       }
     }
   }

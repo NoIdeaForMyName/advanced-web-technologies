@@ -4,6 +4,8 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.pwr.ztw.books.PaginatedResponse;
+import pl.edu.pwr.ztw.books.authors.Author;
 import pl.edu.pwr.ztw.books.books.Book;
 import pl.edu.pwr.ztw.books.books.BooksService;
 import pl.edu.pwr.ztw.books.readers.Reader;
@@ -25,8 +27,12 @@ public class RentalController {
     }
 
     @GetMapping
-    public ResponseEntity<Object> getRentals() {
-        return new ResponseEntity<>(rentalService.getRentals(), HttpStatus.OK);
+    public ResponseEntity<PaginatedResponse<Rental>> getAuthors(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int perPage) {
+
+        PaginatedResponse<Rental> response = rentalService.getPaginatedRentals(page, perPage);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

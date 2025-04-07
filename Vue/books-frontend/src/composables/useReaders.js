@@ -9,17 +9,18 @@ export default function useReaders() {
   
   const pagination = ref({
     page: 1,
-    perPage: 10,
+    perPage: 2,
     total: 0
   })
   
-  const fetchReaders = async () => {
+  const fetchReaders = async (page = pagination.value.page) => {
     isLoading.value = true
     error.value = null
     try {
+      pagination.value.page = page
       const data = await readersService.getReaders(pagination.value.page, pagination.value.perPage)
-      readers.value = data.data
-      pagination.value.total = data.total
+      readers.value = data.data.data
+      pagination.value.total = data.data.total_items
     } catch (err) {
       error.value = err.message
     } finally {

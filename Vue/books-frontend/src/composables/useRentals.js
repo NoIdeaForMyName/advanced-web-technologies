@@ -9,16 +9,17 @@ export default function useRentals() {
 
   const pagination = ref({
     page: 1,
-    perPage: 10,
+    perPage: 2,
     total: 0
   })
 
-  const fetchRentals = async () => {
+  const fetchRentals = async (page = pagination.value.page) => {
     isLoading.value = true
     try {
-      const response = await rentalsService.getAllRentals()
-      rentals.value = response.data
-      pagination.value.total = response.data.total
+      pagination.value.page = page
+      const response = await rentalsService.getAllRentals(page, pagination.value.perPage)
+      rentals.value = response.data.data
+      pagination.value.total = response.data.total_items
     } catch (err) {
       error.value = err.message
     } finally {

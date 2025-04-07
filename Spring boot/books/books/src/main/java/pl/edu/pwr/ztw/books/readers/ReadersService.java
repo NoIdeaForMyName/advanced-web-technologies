@@ -2,6 +2,7 @@ package pl.edu.pwr.ztw.books.readers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.edu.pwr.ztw.books.PaginatedResponse;
 import pl.edu.pwr.ztw.books.activities.ActivityLog;
 import pl.edu.pwr.ztw.books.authors.Author;
 import pl.edu.pwr.ztw.books.books.Book;
@@ -29,6 +30,30 @@ public class ReadersService implements IReadersService {
             addReaderWithLog(new Reader(0, "Mateusz", "Kamiński", "mateusz.kaminski@example.com"), "System");
             addReaderWithLog(new Reader(0, "Olaf", "Nowak", "olaf.nowak@example.com"), "System");
         }
+    }
+
+    @Override
+    public PaginatedResponse<Reader> getPaginatedReaders(int page, int perPage) {
+        int totalItems = readersRepo.size();
+        int totalPages = (int) Math.ceil((double) totalItems / perPage);
+
+        // Zabezpieczenie przed nieprawidłowymi wartościami page
+        page = Math.max(1, Math.min(page, totalPages));
+
+        // Spring Data i większość systemów paginacji używa indeksowania od 0,
+        // ale Twój frontend oczekuje numeracji stron od 1
+        int fromIndex = (page - 1) * perPage;
+        int toIndex = Math.min(fromIndex + perPage, totalItems);
+
+        List<Reader> pageContent = readersRepo.subList(fromIndex, toIndex);
+
+        return new PaginatedResponse<>(
+                pageContent,
+                page,
+                perPage,
+                totalPages,
+                totalItems
+        );
     }
 
     @Override
