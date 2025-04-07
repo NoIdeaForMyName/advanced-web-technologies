@@ -18,9 +18,9 @@ export default function useReaders() {
     error.value = null
     try {
       pagination.value.page = page
-      const data = await readersService.getReaders(pagination.value.page, pagination.value.perPage)
-      readers.value = data.data.data
-      pagination.value.total = data.data.total_items
+      const response = await readersService.getReaders(pagination.value.page, pagination.value.perPage)
+      readers.value = response.data.data
+      pagination.value.total = response.data.total_items
     } catch (err) {
       error.value = err.message
     } finally {
@@ -32,7 +32,8 @@ export default function useReaders() {
     isLoading.value = true
     error.value = null
     try {
-      currentReader.value = await readersService.getReader(id)
+      const response = await readersService.getReader(id)
+      currentReader.value = response.data
     } catch (err) {
       error.value = err.message
     } finally {
