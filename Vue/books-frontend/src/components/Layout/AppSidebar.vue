@@ -9,13 +9,13 @@
         <li><button @click="navigateToRentBook">Rent a Book</button></li>
       </ul>
       
-      <h3>Statistics</h3>
+      <!-- <h3>Statistics</h3>
       <ul>
         <li>Books: {{ stats.bookCount }}</li>
         <li>Authors: {{ stats.authorCount }}</li>
         <li>Readers: {{ stats.readerCount }}</li>
         <li>Active Rentals: {{ stats.activeRentals }}</li>
-      </ul>
+      </ul> -->
     </div>
   </aside>
 </template>
@@ -38,10 +38,14 @@ export default {
       activeRentals: 0
     })
     
-    const { fetchBooks, pagination: paginationBooks } = useBooks()
-    const { fetchAuthors, pagination: paginationAuthors } = useAuthors()
-    const { rentals, fetchRentals, pagination: paginationRentals } = useRentals()
-    const { fetchReaders, pagination: paginationReaders } = useReaders()
+    // const { fetchBooks, pagination: paginationBooks } = useBooks()
+    // const { fetchAuthors, pagination: paginationAuthors } = useAuthors()
+    // const { rentals, fetchRentals, pagination: paginationRentals } = useRentals()
+    // const { fetchReaders, pagination: paginationReaders } = useReaders()
+    const { fetchBooks } = useBooks()
+    const { fetchAuthors } = useAuthors()
+    const { fetchRentals } = useRentals()
+    const { fetchReaders } = useReaders()
     
     onMounted(async () => {
       await fetchBooks()
@@ -49,12 +53,12 @@ export default {
       await fetchReaders()
       await fetchRentals()
       
-      stats.value = {
-        bookCount: paginationBooks.value.total,
-        authorCount: paginationAuthors.value.total,
-        activeRentals: paginationRentals.value.total - rentals.value.filter(r => r.returnDate).length,
-        readerCount: paginationReaders.value.total
-      }
+      // stats.value = {
+      //   bookCount: paginationBooks.value.total,
+      //   authorCount: paginationAuthors.value.total,
+      //   activeRentals: paginationRentals.value.total - rentals.value.filter(r => r.returnDate).length,
+      //   readerCount: paginationReaders.value.total
+      // }
     })
 
     const navigateToAddBook = () => {
