@@ -1,6 +1,8 @@
 # Globalne ignore (głównego repozytorium)
 .DS_Store
 
+node_modules/
+
 # Vue project specific
 /Vue/address-book-vue-app/.DS_Store
 /Vue/address-book-vue-app/node_modules
