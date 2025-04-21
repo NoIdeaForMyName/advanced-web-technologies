@@ -2,14 +2,29 @@ import { createServer } from 'node:http'
 import { createSchema, createYoga } from 'graphql-yoga'
 import fs from "fs";
 import path from "path";
+import axios from 'axios'
 
 const __dirname = path.resolve();
 
-const usersList = [
-    { id: 1, name: "Jan Konieczny", email: "jan.konieczny@wonet.pl", login: "jkonieczny" },
-    { id: 2, name: "Anna Wesołowska", email: "anna.w@sad.gov.pl", login: "anna.wesolowska" },
-    { id: 3, name: "Piotr Waleczny", email: "piotr.waleczny@gp.pl", login: "p.waleczny" }
-];
+async function getRestUsersList() {
+    return axios.get("https://jsonplaceholder.typicode.com/users")
+        .then(users => {
+            console.log(users);
+            return users.data.map(({id, name, email, username}) => ({
+                id: id,
+                name: name,
+                email: email,
+                login: username,
+            }));
+        })
+        .catch(error => {throw error})
+}
+
+// const usersList = [
+//     { id: 1, name: "Jan Konieczny", email: "jan.konieczny@wonet.pl", login: "jkonieczny" },
+//     { id: 2, name: "Anna Wesołowska", email: "anna.w@sad.gov.pl", login: "anna.wesolowska" },
+//     { id: 3, name: "Piotr Waleczny", email: "piotr.waleczny@gp.pl", login: "p.waleczny" }
+// ];
 
 const todosList = [
 { id: 1, title: "Naprawić samochód", completed: false, user_id: 3 },
@@ -22,8 +37,8 @@ const todosList = [
 
 const resolvers = {
     Query: {
-        users: () => usersList,
-        user: (parent, args, context, info) => usersList.find(u => u.id == args.id),
+        users: getRestUsersList,
+        user: (parent, args, context, info) => getRestUsersList().then(usersList => usersList.find(u => u.id == args.id)),
         todos: () => todosList,
         todo: (parent, args, context, info) => todosList.find(t => t.id == args.id)
     },
@@ -31,7 +46,7 @@ const resolvers = {
         todos: (parent, args, context, info) => todosList.filter(t => t.user_id == parent.id)
     },
     ToDoItem: {
-        user: (parent, args, context, info) => usersList.find(u => u.id == parent.user_id)
+        user: (parent, args, context, info) => getRestUsersList().then(usersList => usersList.find(u => u.id == parent.user_id))
     }
 }
 
