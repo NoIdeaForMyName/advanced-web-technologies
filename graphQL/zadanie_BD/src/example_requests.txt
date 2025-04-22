@@ -1,0 +1,112 @@
+##### VARIABLES #####
+
+{
+    "userGetId": "1",
+    "todoGetId": "1",
+    "userCreate": {
+        "name": "Jan Kowalski",
+        "email": "jan@example.com",
+        "login": "jankow"
+    },
+    "userUpdate": {
+        "id": "1",
+        "email": "nowy_email@example.com"
+    },
+    "userDeleteId": "1",
+    "todoCreate": {
+        "title": "Kupić mleko",
+        "completed": false,
+        "user_id": "1"
+    },
+    "todoUpdate": {
+        "id": "1",
+        "completed": true
+    },
+    "todoDeleteId": "1"
+}
+
+##### QUERIES #####
+
+query GetAllTodos {
+  todos {
+    id
+    title
+    completed
+    user {
+      id
+      name
+    }
+  }
+}
+
+query GetUserWithTodos($userGetId: ID!) {
+  user(id: $userGetId) {
+    id
+    name
+    email
+    todos {
+      id
+      title
+      completed
+    }
+  }
+}
+
+query GetTodo($todoGetId: ID!) {
+  todo(id: $todoGetId) {
+    id
+    title
+    completed
+    user {
+      id
+      name
+    }
+  }
+}
+
+###### MUTATIONS #####
+
+mutation CreateUser($userCreate: UserCreate!) {
+  createUser(userCreate: $userCreate) {
+    id
+    name
+    email
+    login
+  }
+}
+
+mutation UpdateUser($userUpdate: UserUpdate!) {
+  updateUser(userUpdate: $userUpdate) {
+    id
+    name
+    email
+  }
+}
+
+mutation CreateTodo($todoCreate: TodoCreate!) {
+  createTodo(todoCreate: $todoCreate) {
+    id
+    title
+    completed
+    user {
+      id
+      name
+    }
+  }
+}
+
+mutation UpdateTodo($todoUpdate: TodoUpdate!) {
+  updateTodo(todoUpdate: $todoUpdate) {
+    id
+    title
+    completed
+  }
+}
+
+mutation DeleteUser($userDeleteId: ID!) {
+  deleteUser(id: $userDeleteId)
+}
+
+mutation DeleteTodo($todoDeleteId: ID!) {
+  deleteTodo(id: $todoDeleteId)
+}

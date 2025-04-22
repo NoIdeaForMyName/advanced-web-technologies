@@ -47,10 +47,10 @@ input TodoUpdate {
 }
 
 type Mutation {
-    createUser(input: UserCreate!): User
-    updateUser(UserUpdate!): User
+    createUser(userCreate: UserCreate!): User
+    updateUser(userUpdate: UserUpdate!): User
     deleteUser(id: ID!): Boolean
-    createTodo(input: TodoCreate!): TodoItem
-    updateTodo(TodoUpdate!): TodoItem
+    createTodo(todoCreate: TodoCreate!): TodoItem
+    updateTodo(todoUpdate: TodoUpdate!): TodoItem
     deleteTodo(id: ID!): Boolean
 }

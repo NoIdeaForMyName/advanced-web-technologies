@@ -48,11 +48,12 @@ const { DataTypes } = require('sequelize');
 const User = UserModel(sequelize, DataTypes);
 const TodoItem = TodoItemModel(sequelize, DataTypes);
 
-User.hasMany(TodoItem, { foreignKey: 'userId' });
-TodoItem.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(TodoItem, { foreignKey: 'user_id' });
+TodoItem.belongsTo(User, { foreignKey: 'user_id' });
 
-module.exports = {
-  db,
-  User,
-  TodoItem
-}
+db.User = User;
+db.TodoItem = TodoItem;
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;
