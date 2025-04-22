@@ -7,12 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
         login: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
         },
     },
     {

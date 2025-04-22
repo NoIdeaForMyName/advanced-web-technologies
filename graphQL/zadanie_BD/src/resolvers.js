@@ -1,4 +1,5 @@
 import db from './models/index.js';
+import { GraphQLError } from 'graphql';
 
 const User = db.User;
 const TodoItem = db.TodoItem;
@@ -28,7 +29,11 @@ const resolvers = {
         },
         updateUser: async (_, { userUpdate }) => {
             const user = await User.findByPk(userUpdate.id);
-            if (!user) throw new Error("User not found");
+            if (!user) {
+                throw new GraphQLError('User not found', {
+                    extensions: { code: 'BAD_USER_INPUT', field: 'id' }
+                });
+            }
             for (const [key, value] of Object.entries(userUpdate)) {
                 console.log(key, value);
                 user[key] = value;
@@ -38,7 +43,11 @@ const resolvers = {
         },
         deleteUser: async (_, { id }) => {
             const user = await User.findByPk(id, { include: [TodoItem] });
-            if (!user) throw new Error('User not found');
+            if (!user) {
+                throw new GraphQLError('User not found', {
+                    extensions: { code: 'BAD_USER_INPUT', field: 'id' }
+                });
+            }
             if (user.TodoItems.length !== 0) return false;
             await user.destroy();
             return true;
@@ -49,22 +58,46 @@ const resolvers = {
                 await todo.save();
                 return todo;
             } catch (err) {
-                throw new Error("Error creating todo item");
+                if (err.name === 'SequelizeForeignKeyConstraintError') {
+                    throw new GraphQLError('Incorrect user id', {
+                      extensions: { code: 'BAD_USER_INPUT', field: 'user_id' }
+                    });
+                } else {
+                    throw new Error("Error creating user");
+                }
             }
         },
         updateTodo: async (_, { todoUpdate }) => {
             const todo = await TodoItem.findByPk(todoUpdate.id);
-            if (!todo) throw new Error("Todo item not found");
-            for (const [key, value] of Object.entries(todoUpdate)) {
-                console.log(key, value);
-                todo[key] = value;
+            if (!todo) {
+                throw new GraphQLError('TodoItem not found', {
+                    extensions: { code: 'BAD_USER_INPUT', field: 'id' }
+                });
             }
-            await todo.save();
+            try {
+                for (const [key, value] of Object.entries(todoUpdate)) {
+                    console.log(key, value);
+                    todo[key] = value;
+                }
+                await todo.save();
+            } catch (err) {
+                if (err.name === 'SequelizeForeignKeyConstraintError') {
+                    throw new GraphQLError('User id not found', {
+                        extensions: { code: 'BAD_USER_INPUT', field: 'user_id' }
+                    });
+                } else {
+                    throw new Error("Error updating todo item")
+                }
+            }
             return todo;
         },
         deleteTodo: async (_, { id }) => {
             const todo = await TodoItem.findByPk(id);
-            if (!todo) throw new Error('Todo not found');
+            if (!todo) {
+                throw new GraphQLError('TodoItem not found', {
+                    extensions: { code: 'BAD_USER_INPUT', field: 'id' }
+                });
+            }
             await todo.destroy();
             return true;
         }
