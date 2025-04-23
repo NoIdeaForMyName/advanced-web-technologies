@@ -99,11 +99,18 @@
 
       let currentFile;
 
-      let typingInfoTimeoutIds = {};
+      let typingInfosTimeoutData = {};
       const TYPING_INFO_TIMEOUT = 2000; //ms
 
       // SOCKET INPUT LISTENERS...
-      socket.on('chat message', (msg) => addMessageItemToHTML(msg));
+      socket.on('chat message', (msg) => {
+        addMessageItemToHTML(msg)
+        if (typingInfosTimeoutData[msg.author]) {
+          const [info, timeoutId] = typingInfosTimeoutData[msg.author];
+          removeTypingInfo(msg.author, info);
+          clearTimeout(timeoutId);
+        }
+      });
       socket.on('typing', (nickname) => showTypingInfoHTML(nickname));
 
       form.addEventListener('submit', function(e) {
@@ -112,10 +119,11 @@
           const msg = {
             'author': nickname,
             'content': input.value,
-            'image': {
+            'image': currentFile ? 
+            {
               'data': currentFile.data,
               'type': currentFile.type
-            },
+            } : null,
             'timestamp': new Date()
           };
           socket.emit('chat message', msg);
@@ -174,9 +182,9 @@
       function showTypingInfoHTML(nickname) {
         let currentInfo;
         
-        if (typingInfoTimeoutIds[nickname]) {
+        if (typingInfosTimeoutData[nickname]) {
           let currentTimeoutId;
-          [currentInfo, currentTimeoutId] = typingInfoTimeoutIds[nickname];
+          [currentInfo, currentTimeoutId] = typingInfosTimeoutData[nickname];
           clearTimeout(currentTimeoutId);
         }
         else {
@@ -185,7 +193,12 @@
           typingInfo.appendChild(currentInfo);
         }
         
-        typingInfoTimeoutIds[nickname] = [currentInfo, setTimeout(() => {currentInfo.remove(); typingInfoTimeoutIds[nickname] = null}, TYPING_INFO_TIMEOUT)];
+        typingInfosTimeoutData[nickname] = [currentInfo, setTimeout(() => removeTypingInfo(nickname, currentInfo), TYPING_INFO_TIMEOUT)];
+      }
+
+      function removeTypingInfo(nickname, info) {
+        info.remove();
+        typingInfosTimeoutData[nickname] = null;
       }
 
       fileUpload.addEventListener('change', (event) => {
