@@ -16,8 +16,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('chat message', (msg) => {
-    console.log('message:', msg);
+    console.log('chat message:', msg);
     socket.broadcast.emit('chat message', msg);
+  });
+
+  socket.on('typing', (nickname) => {
+    console.log('typing:', nickname);
+    socket.broadcast.emit('typing', nickname);
   });
 });
 
