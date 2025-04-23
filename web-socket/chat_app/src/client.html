@@ -115,7 +115,7 @@
 
       form.addEventListener('submit', function(e) {
         e.preventDefault();
-        if (input.value) {
+        if (input.value || currentFile) {
           const msg = {
             'author': nickname,
             'content': input.value,
@@ -130,6 +130,7 @@
           addMessageItemToHTML(msg, true);
           input.value = '';
           currentFile = null;
+          fileUpload.value = '';
         }
       });
 
