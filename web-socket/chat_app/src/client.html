@@ -79,7 +79,9 @@
     <ul id="messages"></ul>
     <div id="typing-info-container"><ul id="typing-info"></ul></div>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      <input id="input" autocomplete="off" />
+      <input type="file" id="myFile" name="filename">
+      <button>Send</button>
     </form>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -93,6 +95,9 @@
       var typingInfo = document.getElementById('typing-info');
       var form = document.getElementById('form');
       var input = document.getElementById('input');
+      var fileUpload = document.getElementById('myFile');
+
+      let currentFile;
 
       let typingInfoTimeoutIds = {};
       const TYPING_INFO_TIMEOUT = 2000; //ms
@@ -107,11 +112,16 @@
           const msg = {
             'author': nickname,
             'content': input.value,
+            'image': {
+              'data': currentFile.data,
+              'type': currentFile.type
+            },
             'timestamp': new Date()
           };
           socket.emit('chat message', msg);
-          input.value = '';
           addMessageItemToHTML(msg, true);
+          input.value = '';
+          currentFile = null;
         }
       });
 
@@ -133,17 +143,29 @@
         const author = document.createElement('div');
         author.className = 'author';
         author.textContent = msg.author;
+        item.appendChild(author);
 
         const content = document.createElement('div');
         content.className = 'content';
         content.textContent = msg.content;
+        item.appendChild(content);
+
+        if (msg.image) {
+          const blob = new Blob([msg.image.data], { type: msg.image.type });
+          const imgURL = URL.createObjectURL(blob);
+
+          const img = document.createElement('img');
+          img.src = imgURL;
+          img.alt = 'attachment';
+          img.className = 'image';
+          img.width = window.innerWidth / 4; 
+          
+          item.append(img);
+        }
 
         const date = document.createElement('div');
         date.className = 'timestamp';
         date.textContent = new Date(msg.timestamp).toLocaleString();
-
-        item.appendChild(author);
-        item.appendChild(content);
         item.appendChild(date);
 
         return item;
@@ -165,6 +187,25 @@
         
         typingInfoTimeoutIds[nickname] = [currentInfo, setTimeout(() => {currentInfo.remove(); typingInfoTimeoutIds[nickname] = null}, TYPING_INFO_TIMEOUT)];
       }
+
+      fileUpload.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+          alert("Please upload an image file");
+          return;
+        }
+        const reader = new FileReader();
+        
+        reader.onload = (e) => {
+          currentFile = {
+            'data': e.target.result,
+            'type': file.type
+          };
+          console.log(currentFile);
+        };
+
+        reader.readAsArrayBuffer(file);
+      });
 
     </script>
   </body>
