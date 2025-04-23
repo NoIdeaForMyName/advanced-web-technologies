@@ -10,9 +10,39 @@
       #input:focus { outline: none; }
       #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
 
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages > li { padding: 0.5rem 1rem; }
-      #messages > li:nth-child(odd) { background: #efefef; }
+      #messages { 
+        display: flex; 
+        flex-direction: column; 
+        margin: 0; 
+        padding: 0; 
+      }
+
+      .message {
+        display: inline-block;
+        align-self: flex-start;
+        background: #8263ff;
+        padding: 0.5rem 1rem; 
+        margin: 1rem 2rem; 
+        border-radius: 20px;
+      }
+
+      .message.author {
+        background: #59a0fb;
+        align-self: flex-end;
+      }
+
+      .message {
+        color: white;
+      }
+
+      .message > .author {
+        font-weight: bold;
+      }
+
+      .message > .timestamp {
+        font-style: italic;
+        color: #a4a4a4;
+      }
     </style>
   </head>
   <body>
@@ -23,6 +53,9 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
+      let nickname = prompt("Enter your nickname:", "User1");
+      nickname = nickname == null || nickname == "" ? "anonymous" : nickname;
+
       var socket = io();
 
       var messages = document.getElementById('messages');
@@ -32,17 +65,49 @@
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
-          socket.emit('chat message', input.value);
+          const msg = {
+            'author': nickname,
+            'content': input.value,
+            'timestamp': new Date()
+          };
+          socket.emit('chat message', msg);
           input.value = '';
+          addMessageItemToHTML(msg, true);
         }
       });
 
-      socket.on('chat message', function(msg) {
-        var item = document.createElement('li');
-        item.textContent = msg;
+      socket.on('chat message', (msg) => addMessageItemToHTML(msg));
+
+      function addMessageItemToHTML(msg, author=false) {
+        const item = createMessageItem(msg);
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight);
-      });
+        if (author) item.classList.add('author');
+      }
+
+      function createMessageItem(msg) {
+        const item = document.createElement('li');
+        item.className = 'message';
+
+        const author = document.createElement('div');
+        author.className = 'author';
+        author.textContent = msg.author;
+
+        const content = document.createElement('div');
+        content.className = 'content';
+        content.textContent = msg.content;
+
+        const date = document.createElement('div');
+        date.className = 'timestamp';
+        date.textContent = new Date(msg.timestamp).toLocaleString();
+
+        item.appendChild(author);
+        item.appendChild(content);
+        item.appendChild(date);
+
+        return item;
+      }
+
     </script>
   </body>
 </html>
