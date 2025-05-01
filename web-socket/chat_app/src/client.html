@@ -11,23 +11,63 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
       }
 
+      #chat-container {
+        display: flex;
+        flex-grow: 1;
+        overflow: hidden;
+      }
+
+      #sidebar {
+        width: 200px;
+        background: #f0f0f0;
+        padding: 1rem;
+        overflow-y: auto;
+        border-right: 1px solid #ddd;
+      }
+
+      #main-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
       #form { 
         background: rgba(0, 0, 0, 0.15); 
         padding: 0.25rem;
         flex-shrink: 0;
-        height: 3rem; /* lub ile chcesz */
+        height: 3rem;
         min-height: 3rem;
-        position: static;
         display: flex; 
         height: 5%; 
         box-sizing: border-box; 
         backdrop-filter: blur(10px); 
       }
 
+      #myFile {
+        align-self: center;
+      }
 
-      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
-      #input:focus { outline: none; }
-      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
+      #input { 
+        border: none; 
+        padding: 0 1rem; 
+        flex-grow: 1; 
+        border-radius: 2rem; 
+        margin: 0.25rem; 
+      }
+
+      #input:focus { 
+        outline: none; 
+      }
+
+      #form > button { 
+        background: #333; 
+        border: none; 
+        padding: 0 1rem; 
+        margin: 0.25rem; 
+        border-radius: 3px; 
+        outline: none; 
+        color: #fff; 
+      }
 
       #messages {
         flex-grow: 1;
@@ -35,6 +75,7 @@
         flex-direction: column; 
         margin: 0; 
         padding: 0; 
+        overflow-y: auto;
       }
 
       #typing-info-container {
@@ -51,9 +92,19 @@
         display: inline-block;
         align-self: flex-start;
         background: #8263ff;
-        padding: 0.5rem 1rem; 
-        margin: 1rem 2rem; 
+        padding: 0.5rem 1rem;
+        margin: 0.5rem 1rem;
         border-radius: 20px;
+        max-width: 70%;
+        word-wrap: break-word; /* zawijanie długich słów */
+        overflow-wrap: break-word; /* alternatywa dla word-wrap */
+        word-break: break-word; /* zawijanie bardzo długich słów */
+        white-space: pre-wrap; /* zachowanie formatowania */
+      }
+
+      .message .content {
+        white-space: pre-wrap; /* zawijanie tekstu */
+        overflow: hidden;
       }
 
       .message.author {
@@ -71,24 +122,143 @@
 
       .message > .timestamp {
         font-style: italic;
-        color: #a4a4a4;
+        color: #ffffff;
+        font-size: 0.8rem;
+      }
+
+      .room-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .room-list li {
+        padding: 0.5rem;
+        cursor: pointer;
+        border-radius: 4px;
+        margin-bottom: 0.25rem;
+      }
+
+      .room-list li:hover {
+        background: #ddd;
+      }
+
+      .room-list li.active {
+        background: #59a0fb;
+        color: white;
+      }
+
+      .user-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 1rem;
+      }
+
+      .user-list li {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .notification {
+        align-self: center;
+        background: #e0e0e0;
+        color: #555;
+        padding: 0.25rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        margin: 0.5rem 0;
+      }
+
+      .image {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-top: 0.5rem;
+      }
+
+      #room-form {
+        display: flex;
+        margin-bottom: 1rem;
+        min-width: 0;
+      }
+
+      #new-room-input {
+        flex-grow: 1;
+        padding: 0.25rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        min-width: 0;
+      }
+
+      #new-room-button {
+        margin-left: 0.5rem;
+        background: #59a0fb;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0 0.75rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 768px) {
+        #form {
+          flex-wrap: wrap;
+          height: auto;
+          min-height: 5rem;
+          padding: 0.5rem;
+        }
+        
+        #input {
+          width: 100%;
+          order: 1;
+          margin-bottom: 0.25rem;
+        }
+        
+        #myFile {
+          flex-grow: 1;
+          order: 2;
+          min-width: 0;
+        }
+        
+        #form > button {
+          order: 3;
+          flex-grow: 1;
+        }
+        
+        .message {
+          max-width: 85%;
+        }
       }
     </style>
   </head>
   <body>
-    <ul id="messages"></ul>
-    <div id="typing-info-container"><ul id="typing-info"></ul></div>
-    <form id="form" action="">
-      <input id="input" autocomplete="off" />
-      <input type="file" id="myFile" name="filename">
-      <button>Send</button>
-    </form>
+    <div id="chat-container">
+      <div id="sidebar">
+        <h3>Rooms</h3>
+        <div id="room-form">
+          <input type="text" id="new-room-input" placeholder="New room name">
+          <button id="new-room-button">+</button>
+        </div>
+        <ul class="room-list" id="room-list"></ul>
+        <h3>Users in room</h3>
+        <ul class="user-list" id="user-list"></ul>
+      </div>
+      <div id="main-content">
+        <ul id="messages"></ul>
+        <div id="typing-info-container"><ul id="typing-info"></ul></div>
+        <form id="form" action="">
+          <input id="input" autocomplete="off" placeholder="Type your message..." />
+          <input type="file" id="myFile" name="filename" accept="image/*">
+          <button>Send</button>
+        </form>
+      </div>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      let nickname = prompt("Enter your nickname:", "User1");
+      let nickname = prompt("Enter your nickname:", "User" + Math.floor(Math.random() * 1000));
       nickname = nickname == null || nickname == "" ? "anonymous" : nickname;
-
+      
+      let currentRoom = 'general';
       var socket = io();
 
       var messages = document.getElementById('messages');
@@ -96,26 +266,56 @@
       var form = document.getElementById('form');
       var input = document.getElementById('input');
       var fileUpload = document.getElementById('myFile');
+      var roomList = document.getElementById('room-list');
+      var userList = document.getElementById('user-list');
+      var newRoomInput = document.getElementById('new-room-input');
+      var newRoomButton = document.getElementById('new-room-button');
 
       let currentFile;
-
       let typingInfosTimeoutData = {};
       const TYPING_INFO_TIMEOUT = 2000; //ms
 
+      // Dołącz do domyślnego pokoju
+      socket.emit('join', { nickname, room: currentRoom });
+
       // SOCKET INPUT LISTENERS...
       socket.on('chat message', (msg) => {
-        addMessageItemToHTML(msg)
-        if (typingInfosTimeoutData[msg.author]) {
-          const [info, timeoutId] = typingInfosTimeoutData[msg.author];
-          removeTypingInfo(msg.author, info);
-          clearTimeout(timeoutId);
+        if (msg.room === currentRoom) {
+          addMessageItemToHTML(msg, msg.author === nickname);
+          if (typingInfosTimeoutData[msg.author]) {
+            const [info, timeoutId] = typingInfosTimeoutData[msg.author];
+            removeTypingInfo(msg.author, info);
+            clearTimeout(timeoutId);
+          }
         }
       });
-      socket.on('typing', (nickname) => showTypingInfoHTML(nickname));
+
+      socket.on('typing', (typingNickname) => {
+        // Pokazuj informację tylko jeśli to nie my piszemy
+        if (typingNickname !== nickname) {
+          showTypingInfoHTML(typingNickname);
+        }
+      });
+
+      socket.on('user joined', (nickname) => {
+        addNotification(`${nickname} joined the room`);
+      });
+
+      socket.on('user left', (nickname) => {
+        addNotification(`${nickname} left the room`);
+      });
+
+      socket.on('room users', (users) => {
+        updateUserList(users);
+      });
+
+      socket.on('room list', (rooms) => {
+        updateRoomList(rooms);
+      });
 
       form.addEventListener('submit', function(e) {
         e.preventDefault();
-        if (input.value || currentFile) {
+        if ((input.value && input.value.trim() !== '') || currentFile) {
           const msg = {
             'author': nickname,
             'content': input.value,
@@ -124,10 +324,10 @@
               'data': currentFile.data,
               'type': currentFile.type
             } : null,
-            'timestamp': new Date()
+            'timestamp': new Date(),
+            'room': currentRoom
           };
           socket.emit('chat message', msg);
-          addMessageItemToHTML(msg, true);
           input.value = '';
           currentFile = null;
           fileUpload.value = '';
@@ -137,6 +337,75 @@
       input.addEventListener('input', (event) => {
         socket.emit('typing', nickname);
       });
+
+      fileUpload.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (!file.type.match('image.*')) {
+          alert("Please upload an image file");
+          event.target.value = '';
+          currentFile = null;
+          return;
+        }
+        const reader = new FileReader();
+        
+        reader.onload = (e) => {
+          currentFile = {
+            'data': e.target.result,
+            'type': file.type
+          };
+        };
+
+        reader.onerror = () => {
+          alert("Error reading file");
+          event.target.value = '';
+          currentFile = null;
+        };
+
+        reader.readAsArrayBuffer(file);
+      });
+
+      newRoomButton.addEventListener('click', () => {
+        const roomName = newRoomInput.value.trim();
+        if (roomName && roomName !== currentRoom) {
+          joinRoom(roomName);
+          newRoomInput.value = '';
+        }
+      });
+
+      function joinRoom(room) {
+        socket.emit('join', { nickname, room });
+        currentRoom = room;
+        messages.innerHTML = '';
+        addNotification(`You joined ${room}`);
+      }
+
+      function updateRoomList(rooms) {
+        roomList.innerHTML = '';
+        rooms.forEach(room => {
+          const li = document.createElement('li');
+          li.textContent = room;
+          if (room === currentRoom) {
+            li.classList.add('active');
+          }
+          li.addEventListener('click', () => {
+            if (room !== currentRoom) {
+              joinRoom(room);
+            }
+          });
+          roomList.appendChild(li);
+        });
+      }
+
+      function updateUserList(users) {
+        userList.innerHTML = '';
+        users.forEach(user => {
+          const li = document.createElement('li');
+          li.textContent = user;
+          userList.appendChild(li);
+        });
+      }
 
       function addMessageItemToHTML(msg, author=false) {
         const item = createMessageItem(msg);
@@ -167,14 +436,13 @@
           img.src = imgURL;
           img.alt = 'attachment';
           img.className = 'image';
-          img.width = window.innerWidth / 4; 
           
           item.append(img);
         }
 
         const date = document.createElement('div');
         date.className = 'timestamp';
-        date.textContent = new Date(msg.timestamp).toLocaleString();
+        date.textContent = new Date(msg.timestamp).toLocaleTimeString();
         item.appendChild(date);
 
         return item;
@@ -190,7 +458,7 @@
         }
         else {
           currentInfo = document.createElement('li');
-          currentInfo.textContent = `${nickname} is writing...`;
+          currentInfo.textContent = `${nickname} is typing...`;
           typingInfo.appendChild(currentInfo);
         }
         
@@ -202,25 +470,13 @@
         typingInfosTimeoutData[nickname] = null;
       }
 
-      fileUpload.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
-          alert("Please upload an image file");
-          return;
-        }
-        const reader = new FileReader();
-        
-        reader.onload = (e) => {
-          currentFile = {
-            'data': e.target.result,
-            'type': file.type
-          };
-          console.log(currentFile);
-        };
-
-        reader.readAsArrayBuffer(file);
-      });
-
+      function addNotification(text) {
+        const notification = document.createElement('li');
+        notification.className = 'notification';
+        notification.textContent = text;
+        messages.appendChild(notification);
+        window.scrollTo(0, document.body.scrollHeight);
+      }
     </script>
   </body>
 </html>
