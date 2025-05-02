@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
     socket.join(room);
 
     // Powiadom innych w pokoju
-    io.to(room).emit('user joined', nickname);
+    socket.to(room).emit('user joined', nickname);
     io.to(room).emit('room users', Array.from(rooms.get(room)));
     
     // Wyślij aktualną listę pokoi do wszystkich
