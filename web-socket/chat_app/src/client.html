@@ -18,6 +18,7 @@
       }
 
       #sidebar {
+        position: relative;
         width: 200px;
         background: #f0f0f0;
         padding: 1rem;
@@ -199,6 +200,11 @@
         flex-shrink: 0;
       }
 
+      #nickname-display {
+        position: absolute;
+        bottom: 1rem;
+      }
+
       @media (max-width: 768px) {
         #form {
           flex-wrap: wrap;
@@ -241,6 +247,10 @@
         <ul class="room-list" id="room-list"></ul>
         <h3>Users in room</h3>
         <ul class="user-list" id="user-list"></ul>
+        <div id="nickname-display">
+          <h3>Nickname:</h3>
+          <p id="username"></p>
+        </div>
       </div>
       <div id="main-content">
         <ul id="messages"></ul>
@@ -257,6 +267,7 @@
     <script>
       let nickname = prompt("Enter your nickname:", "User" + Math.floor(Math.random() * 1000));
       nickname = nickname == null || nickname == "" ? "anonymous" : nickname;
+      document.getElementById('username').textContent = nickname;
       
       let currentRoom = 'general';
       var socket = io();
