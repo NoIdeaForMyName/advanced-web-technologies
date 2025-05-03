@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js" type="module"></script>
     <title>Socket.IO chat</title>
     <style>
       html, body { 
@@ -233,6 +234,38 @@
         .message {
           max-width: 85%;
         }
+
+        #sidebar {
+          min-width: 150px;
+        }
+
+        emoji-picker {
+          width: 100%;
+          right: 0;
+          bottom: 4rem;
+        }
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      emoji-picker {
+        --emoji-size: 1.5rem;
+        --num-columns: 8;
+        --category-emoji-size: 1.2rem;
+        position: absolute;
+        bottom: 3.5rem;
+        right: 1rem;
+        z-index: 100;
+      }
+
+      .emoji-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        padding: 0 0.5rem;
+        cursor: pointer;
       }
     </style>
   </head>
@@ -255,8 +288,10 @@
       <div id="main-content">
         <ul id="messages"></ul>
         <div id="typing-info-container"><ul id="typing-info"></ul></div>
+        <emoji-picker id="emoji-picker" class="hidden"></emoji-picker>
         <form id="form" action="">
           <input id="input" autocomplete="off" placeholder="Type your message..." />
+          <button type="button" id="emoji-button" class="emoji-btn">😀</button>
           <input type="file" id="myFile" name="filename" accept="image/*">
           <button>Send</button>
         </form>
@@ -488,6 +523,26 @@
         messages.appendChild(notification);
         window.scrollTo(0, document.body.scrollHeight);
       }
+
+      // Obsługa emoji pickera
+      const picker = document.getElementById('emoji-picker');
+      const emojiButton = document.getElementById('emoji-button');
+
+      emojiButton.addEventListener('click', () => {
+        picker.classList.toggle('hidden');
+      });
+
+      picker.addEventListener('emoji-click', event => {
+        input.value += event.detail.unicode;
+        picker.classList.add('hidden');
+      });
+
+      // Zamknij picker przy kliknięciu gdzie indziej
+      document.addEventListener('click', (e) => {
+        if (!picker.contains(e.target) && e.target !== emojiButton) {
+          picker.classList.add('hidden');
+        }
+      });
     </script>
   </body>
 </html>
