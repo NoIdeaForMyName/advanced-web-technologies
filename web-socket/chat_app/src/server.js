@@ -13,6 +13,10 @@ app.get('/', (req, res) => {
 const rooms = new Map();
 rooms.set('general', new Set()); // Domyślny pokój
 
+// Przechowujemy historię wiadomości dla każdego pokoju
+const messageHistory = new Map();
+messageHistory.set('general', []);
+
 io.on('connection', (socket) => {
   let currentUser = { nickname: null, room: null };
 
@@ -20,6 +24,7 @@ io.on('connection', (socket) => {
     // Jeśli pokój nie istnieje, utwórz go
     if (!rooms.has(room)) {
       rooms.set(room, new Set());
+      messageHistory.set(room, []);
     }
 
     // Opuść poprzedni pokój jeśli był
@@ -31,6 +36,12 @@ io.on('connection', (socket) => {
     currentUser = { nickname, room };
     rooms.get(room).add(nickname);
     socket.join(room);
+
+    // Wyślij historię wiadomości dla nowego użytkownika
+    const history = messageHistory.get(room).slice(-50); // Ostatnie 50 wiadomości
+    history.forEach(msg => {
+      socket.emit('chat message', msg);
+    });
 
     // Powiadom innych w pokoju
     socket.to(room).emit('user joined', nickname);
@@ -55,6 +66,9 @@ io.on('connection', (socket) => {
       // Dodaj unikalne ID do wiadomości
       msg.id = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
       
+      // Zapisz wiadomość w historii
+      messageHistory.get(currentUser.room).push(msg);
+      
       io.to(currentUser.room).emit('chat message', msg);
     }
   });
@@ -76,6 +90,7 @@ io.on('connection', (socket) => {
     // Jeśli pokój jest pusty, usuń go (oprócz general)
     if (rooms.get(room).size === 0 && room !== 'general') {
       rooms.delete(room);
+      messageHistory.delete(room);
     }
     
     // Wyślij aktualną listę pokoi do wszystkich
