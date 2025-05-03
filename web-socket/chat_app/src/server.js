@@ -51,6 +51,10 @@ io.on('connection', (socket) => {
   socket.on('chat message', (msg) => {
     if (currentUser.room) {
       msg.room = currentUser.room;
+      
+      // Dodaj unikalne ID do wiadomości
+      msg.id = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+      
       io.to(currentUser.room).emit('chat message', msg);
     }
   });
