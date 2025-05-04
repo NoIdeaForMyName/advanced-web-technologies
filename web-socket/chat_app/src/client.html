@@ -531,7 +531,7 @@
       function addMessageItemToHTML(msg, author=false) {
         const item = createMessageItem(msg);
         messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
+        messages.scrollTo(0, messages.scrollHeight);
         if (author) item.classList.add('author');
         
         // Dodaj unikalne ID do wiadomości
@@ -630,7 +630,7 @@
         notification.className = 'notification';
         notification.textContent = text;
         messages.appendChild(notification);
-        window.scrollTo(0, document.body.scrollHeight);
+        messages.scrollTo(0, messages.scrollHeight);
       }
 
       function cancelReply() {
