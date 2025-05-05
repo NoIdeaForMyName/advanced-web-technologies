@@ -551,8 +551,8 @@
           replyToMessage = msg;
           
           // Pokaż podgląd odpowiedzi
-          replyPreviewText.textContent = msg.content.length > 30 
-            ? msg.content.substring(0, 30) + '...' 
+          replyPreviewText.textContent = msg.content.length > 12 
+            ? msg.content.substring(0, 12) + '...' 
             : msg.content;
           replyPreview.classList.remove('hidden');
         });
@@ -566,7 +566,7 @@
         if (msg.replyTo) {
           const replyInfo = document.createElement('div');
           replyInfo.className = 'reply-info';
-          replyInfo.textContent = `Replying to ${msg.replyTo.author}: ${msg.replyTo.content}`;
+          replyInfo.textContent = `Replying to ${msg.replyTo.author}: ${msg.replyTo.content.length > 10 ? msg.replyTo.content.substring(0, 10) + '...' : msg.replyTo.content}`;
           item.appendChild(replyInfo);
         }
 
