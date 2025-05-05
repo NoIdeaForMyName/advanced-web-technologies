@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO Chat</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js" type="module"></script>
+</head>
+<body>
+  <div id="chat-container">
+    <div id="sidebar">
+      <h3>Rooms</h3>
+      <div id="room-form">
+        <input type="text" id="new-room-input" placeholder="New room name">
+        <button id="new-room-button">+</button>
+      </div>
+      <ul class="room-list" id="room-list"></ul>
+      <h3>Users in room</h3>
+      <ul class="user-list" id="user-list"></ul>
+      <div id="nickname-display">
+        <h3>Nickname:</h3>
+        <p id="username"></p>
+      </div>
+    </div>
+    <div id="main-content">
+      <ul id="messages"></ul>
+      <div id="typing-info-container"><ul id="typing-info"></ul></div>
+      <div id="reply-preview" class="hidden">
+        <div id="reply-preview-content">Replying to: <span id="reply-preview-text"></span></div>
+        <button id="cancel-reply">×</button>
+      </div>
+      <emoji-picker id="emoji-picker" class="hidden"></emoji-picker>
+      <form id="form" action="">
+        <input id="input" autocomplete="off" placeholder="Type your message..." />
+        <button type="button" id="emoji-button" class="emoji-btn">😀</button>
+        <input type="file" id="myFile" name="filename" accept="image/*">
+        <button>Send</button>
+      </form>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/scripts.js"></script>
+</body>
+</html>
